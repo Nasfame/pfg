@@ -37,8 +37,8 @@ jobs:
           # base for tags
           images: |
             ${{ env.REGISTRY }}/${{ github.repository }}
-            ${{ env.REGISTRY}}/${{github.repository_owner}}/web3.sub
-            ${{ env.REGISTRY}}/${{github.repository_owner}}/web3sub
+            ${{ env.REGISTRY}}/${{github.repository_owner}}/pfg
+            ${{ env.REGISTRY}}/${{github.repository_owner}}/pfg.questbook
 
           tags: |
             type=schedule

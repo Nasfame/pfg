@@ -1,16 +1,9 @@
-# create-web3-dapp
+# PFG
 
-We are trying to establish a on-chain subscription service for Dapps
+Novel Price Guard Protocol for volatile crypto tokens.
 
 ## Aim
 
-Simplify and establish reliable subscription services for Dapps
+Novel Price Guard Protocol for volatile crypto tokens.
 
-- Payments are undertaken by the Dapp contracts
-- We just allow wallets to be subscribed, unsub, and verified for Dapp contracts on chain
-
-
-## Contract Onboarding
-
-1. We have versioned contracts in /contracts
-2. We have utils folder for free functions (internal) 
+- Everyday users can prese
