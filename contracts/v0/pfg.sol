@@ -9,18 +9,14 @@ contract PfgV0 {
 
     event Withdrawal(uint amount, uint when);
 
-    constructor(uint _unlockTime) payable {
-        require(
-            block.timestamp < _unlockTime,
-            "Unlock time should be in the future"
-        );
+    constructor() payable {
+        // Set the unlock time to 2 weeks (1209600 seconds) from the current block timestamp
+        unlockTime = block.timestamp + 1209600;
 
-        unlockTime = _unlockTime;
         owner = payable(msg.sender);
     }
 
     function withdraw() public {
-        // Uncomment this line, and the import of "hardhat/console.sol", to print a log in your terminal
         // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
 
         require(block.timestamp >= unlockTime, "You can't withdraw yet");
