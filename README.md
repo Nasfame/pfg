@@ -6,4 +6,4 @@ Novel Price Guard Protocol for volatile crypto tokens.
 
 Novel Price Guard Protocol for volatile crypto tokens.
 
-- Everyday users can prese
+- Users can now safely exchange volatile crypto tokens for every day use without relying on stable coins.
