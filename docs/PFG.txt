@@ -1,0 +1,47 @@
+title PFG
+
+actor Grantee
+participant PFG
+actor Grantor
+database Questbook
+participant "ARB Liquidity Provider" as ARB-LP
+
+participant Proposal
+
+database ARB-PFG
+
+participant GMX
+
+
+
+ARB-LP->ARB-PFG: 0. Deposits ARB to the stake pool for 1 year
+
+Grantee->Proposal: 1. Creates a new proposal of 1000ARB
+
+Proposal->PFG: 2. Opts for PFG
+
+Proposal->Questbook: 3. Submits
+
+Grantor->Proposal: 4. Approves
+
+PFG->ARB-PFG: 5. Borrows 1000ARB
+
+PFG->GMX: 6. Opens Positions 
+
+Grantor->Proposal: 7. Disburses Payment
+
+PFG->Proposal: 8. Withdraws the disbursed 1000ARB
+
+PFG->GMX: 9. Closes the Positions
+
+PFG->ARB-PFG: 10. Returns the borrowed 1000 ARB along with interest in PFG tokens
+
+PFG->Proposal: 11. Releases the unfluctuated amount of guarded ARB tokens
+
+Proposal<-Grantee: 12. Withdraws unfluctuated ARB .
+
+
+
+
+
+
