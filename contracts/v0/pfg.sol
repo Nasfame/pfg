@@ -35,10 +35,10 @@ contract PfgV0 {
     constructor() payable {
         unlockTime = block.timestamp + deltaUnlockTime;
 
-        QB = payable(msg.sender);
         proposalValue = msg.value;
-
         emit Deposit(proposalValue, block.timestamp);
+
+        QB = payable(msg.sender);
 
         Grantor = QB; //TODO: for simplicity; take from constructor arg.
 
@@ -84,5 +84,16 @@ contract PfgV0 {
         emit Withdrawal(address(this).balance, block.timestamp);
 
         Grantee.transfer(address(this).balance);
+    }
+
+    function liquidate() public onlyQB {
+        require(
+            proposalPhase != ProposalState.Paid,
+            "Insufficient funds to liquid"
+        );
+
+        emit Withdrawal(address(this).balance, block.timestamp);
+
+        QB.transfer(address(this).balance);
     }
 }
