@@ -32,7 +32,7 @@ jobs:
       max-parallel: 2
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest] # windows-latest not supported
         node_version: [18, 19, 20]
         architecture: [x64] #, arm64 ] # arm,
 
@@ -52,11 +52,11 @@ jobs:
           node-version: ${{ matrix.node_version }}
           architecture: ${{ matrix.architecture }}
           check-latest: true
-      
+
       - name: Write environment
         run: |
           echo $envfile > .env.tmp
-          sed 's/ /\n/g' .env.tmp > .env 
+          sed 's/ /\n/g' .env.tmp > .env
 
       - name: Install dependencies
         run: pnpm install
