@@ -17,7 +17,7 @@ contract PfgV0 {
     address payable public QB; //Questbook
     address payable public Grantor;
     address payable public Grantee;
- 
+
     // migrate: to types.sol/Proposal struct
     uint public proposalValue;
     ProposalState public proposalPhase;
@@ -65,7 +65,7 @@ contract PfgV0 {
 
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
 
-        require(proposalPhase == ProposalState.Paid, "Proposal already paid");
+        require(proposalPhase != ProposalState.Paid, "Proposal already paid");
 
         unlockTime = 0;
         proposalPhase = ProposalState.Paid;
@@ -94,6 +94,8 @@ contract PfgV0 {
         emit Withdrawal(address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);
+
+        proposalPhase = ProposalState.Canceled;
 
         // if deposits are made post liquidations, only Grantee can withdraw the amount.
     }
