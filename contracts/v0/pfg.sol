@@ -49,6 +49,7 @@ contract PfgV0 {
     }
 
     modifier proposalValueCheck() {
+        proposalValue = msg.value;
         require(proposalValue!=0, "Proposal Value needs to be greator than 0");
         _;
     }
