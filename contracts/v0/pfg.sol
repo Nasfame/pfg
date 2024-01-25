@@ -24,7 +24,7 @@ contract PfgV0 {
 
     address payable public QB; //Questbook
     address payable public Grantor;
-    address payable public Grantee;
+    address public Grantee;
 
     uint public proposalValue;
     ProposalState public proposalPhase;
@@ -42,7 +42,7 @@ contract PfgV0 {
 
         Grantor = QB; //TODO: for simplicity; take from constructor arg.
 
-        Grantee = "0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02"; //TODO: its me; but take from constructor arg
+        Grantee = 0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02; //TODO: its me; but take from constructor arg
 
         proposalPhase = ProposalState.Accepted;
     }
