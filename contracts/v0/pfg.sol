@@ -34,7 +34,7 @@ contract PfgV0 {
 
         emit Deposit(proposalValue, block.timestamp);
 
-        QB = payab  le(msg.sender);
+        QB = payable(msg.sender);
 
         Grantor = QB; //TODO: for simplicity; take from constructor arg.
 
