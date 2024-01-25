@@ -95,5 +95,7 @@ contract PfgV0 {
         emit Withdrawal(address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);
+
+        // if deposits are made post liquidations, only Grantee can withdraw the amount.
     }
 }
