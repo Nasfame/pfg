@@ -17,7 +17,8 @@ contract PfgV0 {
     address payable public QB; //Questbook
     address payable public Grantor;
     address payable public Grantee;
-
+ 
+    // migrate: to types.sol/Proposal struct
     uint public proposalValue;
     ProposalState public proposalPhase;
 
