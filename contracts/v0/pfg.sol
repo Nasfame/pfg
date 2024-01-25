@@ -49,8 +49,7 @@ contract PfgV0 {
     }
 
     modifier proposalValueCheck() {
-        proposalValue = msg.value;
-        require(proposalValue>0, "Proposal Value needs to be greator than 0");
+        require(msg.value>0, "Proposal Value needs to be greator than 0");
         _;
     }
 
@@ -70,11 +69,11 @@ contract PfgV0 {
         _;
     }
 
-    function deposit() public payable onlyGrantor {
+    function deposit() public payable onlyGrantor proposalValueCheck {
         require(msg.value > 0, "Deposit amount must be greater than 0");
 
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
-
+ 
         require(proposalPhase != ProposalState.Paid, "Proposal already paid");
 
         unlockTime = 0;
