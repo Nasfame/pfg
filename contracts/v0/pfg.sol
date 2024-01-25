@@ -80,10 +80,14 @@ contract PfgV0 {
         proposalPhase = ProposalState.Paid;
 
         emit Deposit(msg.value, block.timestamp);
+
+        // TODO: PFG OPEN SHORT
     }
 
     function withdraw() public onlyGrantee readyToWithdraw {
         emit Withdrawal(address(this).balance, block.timestamp);
+
+        // TODO: PFG CLOSE
 
         uint granteeShare = calcGranteeShare();
 
