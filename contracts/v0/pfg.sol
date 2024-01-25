@@ -9,14 +9,6 @@ enum ProposalState {
     Canceled,
     Paid
 }
-struct Proposal {
-    uint id;
-    string title;
-    string description;
-    uint value;
-    address payable recipient;
-    string phase;
-}
 
 contract PfgV0 {
     uint public deltaUnlockTime = 1209600; //2weeks
