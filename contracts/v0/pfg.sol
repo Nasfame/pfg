@@ -98,4 +98,19 @@ contract PfgV0 {
 
         // if deposits are made post liquidations, only Grantee can withdraw the amount.
     }
+
+    function calculateGranteeWithdrawal()
+        internal
+        view
+        returns (uint granteeShare)
+    {
+        uint bal = address(this).balance;
+
+        granteeShare = bal - proposalValue;
+
+        if (granteeShare < 0) {
+            granteeShare = bal;
+        }
+        return granteeShare;
+    }
 }
