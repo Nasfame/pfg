@@ -30,7 +30,7 @@ contract PfgV0 {
 
         proposalValue = msg.value;
 
-        require(proposalValue>0, "Proposal Value needs to be greator than 0");
+        require(proposalValue!=0, "Proposal Value needs to be greator than 0");
 
         emit Deposit(proposalValue, block.timestamp);
 
