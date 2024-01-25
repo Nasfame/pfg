@@ -99,7 +99,7 @@ contract PfgV0 {
         // if deposits are made post liquidations, only Grantee can withdraw the amount.
     }
 
-    function calculateGranteeWithdrawal()
+    function calcGranteeShare()
         internal
         view
         returns (uint granteeShare)
