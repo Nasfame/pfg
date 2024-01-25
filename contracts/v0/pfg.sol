@@ -3,7 +3,12 @@ pragma solidity ^0.8.20;
 
 import "hardhat/console.sol";
 
-enum ProposalState { Accepted, Rejected, Canceled, Paid }
+enum ProposalState {
+    Accepted,
+    Rejected,
+    Canceled,
+    Paid
+}
 struct Proposal {
     uint id;
     string title;
@@ -24,12 +29,11 @@ contract PfgV0 {
     uint public proposalValue;
     ProposalState public proposalPhase;
 
-
     event Deposit(uint amount, uint when);
     event Withdrawal(uint amount, uint when);
 
     constructor() payable {
-        unlockTime = block.timestamp + deltaUnlockTime ;
+        unlockTime = block.timestamp + deltaUnlockTime;
 
         QB = payable(msg.sender);
         proposalValue = msg.value;
@@ -38,12 +42,10 @@ contract PfgV0 {
 
         Grantor = QB; //TODO: for simplicity; take from constructor arg.
 
-        Grantee="0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02"; //TODO: its me; but take from constructor arg
+        Grantee = "0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02"; //TODO: its me; but take from constructor arg
 
         proposalPhase = ProposalState.Accepted;
-
     }
-
 
     modifier onlyQB() {
         require(msg.sender == QB, "Only QB can call this function");
@@ -60,20 +62,18 @@ contract PfgV0 {
         _;
     }
 
-
     function deposit() public payable onlyGrantor {
         require(msg.value > 0, "Deposit amount must be greater than 0");
 
-        require(msg.value>=proposalValue, "Insufficient funds to deposit");
+        require(msg.value >= proposalValue, "Insufficient funds to deposit");
 
         require(proposalPhase == ProposalState.Paid, "Proposal already paid");
 
-        unlockTime = -1;
+        unlockTime = 0;
         proposalPhase = ProposalState.Paid;
 
         emit Deposit(msg.value, block.timestamp);
     }
-
 
     function withdraw() public {
         require(block.timestamp >= unlockTime, "You can't withdraw yet");
