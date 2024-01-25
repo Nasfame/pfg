@@ -3,6 +3,17 @@ pragma solidity ^0.8.20;
 
 import "hardhat/console.sol";
 
+enum ProposalState { Accepted, Rejected, Canceled, Paid }
+
+struct Proposal {
+    uint id;
+    string title;
+    string description;
+    uint value;
+    address payable recipient;
+    string phase;
+}
+
 contract PfgV0 {
     uint public deltaUnlockTime = 1209600; //2weeks
     uint public unlockTime;
@@ -12,6 +23,7 @@ contract PfgV0 {
     address payable public Grantee;
 
     uint public proposalValue;
+    ProposalState public proposalPhase;
 
 
     event Deposit(uint amount, uint when);
@@ -28,6 +40,9 @@ contract PfgV0 {
         Grantor = QB; //TODO: for simplicity; take from constructor arg.
 
         Grantee="0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02"; //TODO: its me; but take from constructor arg
+
+        proposalPhase = Accepted;
+
     }
 
 
@@ -50,7 +65,10 @@ contract PfgV0 {
     function deposit() public payable onlyGrantor {
         require(msg.value > 0, "Deposit amount must be greater than 0");
 
-        proposalValue += msg.value;
+        require(msg.value>=proposalValue, "Insufficient funds to deposit");
+
+        unlockTime = -1;
+        proposalPhase = Paid;
 
         emit Deposit(msg.value, block.timestamp);
     }
