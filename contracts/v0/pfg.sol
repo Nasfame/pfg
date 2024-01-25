@@ -29,9 +29,12 @@ contract PfgV0 {
         unlockTime = block.timestamp + deltaUnlockTime;
 
         proposalValue = msg.value;
+
+        require(proposalValue>0, "Proposal Value needs to be greator than 0");
+
         emit Deposit(proposalValue, block.timestamp);
 
-        QB = payable(msg.sender);
+        QB = payab  le(msg.sender);
 
         Grantor = QB; //TODO: for simplicity; take from constructor arg.
 
