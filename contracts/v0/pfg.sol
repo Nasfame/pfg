@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import "hardhat/console.sol";
 
 enum ProposalState { Accepted, Rejected, Canceled, Paid }
-
 struct Proposal {
     uint id;
     string title;
@@ -41,7 +40,7 @@ contract PfgV0 {
 
         Grantee="0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02"; //TODO: its me; but take from constructor arg
 
-        proposalPhase = Accepted;
+        proposalPhase = ProposalState.Accepted;
 
     }
 
@@ -67,8 +66,10 @@ contract PfgV0 {
 
         require(msg.value>=proposalValue, "Insufficient funds to deposit");
 
+        require(proposalPhase == ProposalState.Paid, "Proposal already paid");
+
         unlockTime = -1;
-        proposalPhase = Paid;
+        proposalPhase = ProposalState.Paid;
 
         emit Deposit(msg.value, block.timestamp);
     }
