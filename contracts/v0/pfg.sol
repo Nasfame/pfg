@@ -102,6 +102,7 @@ contract PfgV0 {
     function calcGranteeShare()
         internal
         view
+        readyToWithdraw
         returns (uint granteeShare)
     {
         uint bal = address(this).balance;
