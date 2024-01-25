@@ -83,7 +83,13 @@ contract PfgV0 {
     function withdraw() public onlyGrantee readyToWithdraw {
         emit Withdrawal(address(this).balance, block.timestamp);
 
-        Grantee.transfer(address(this).balance);
+        uint granteeShare = calcGranteeShare();
+
+        Grantee.transfer(granteeShare);
+
+        uint qbShare = address(this).balance;
+
+        Grantor.transfer(qbShare);
     }
 
     function liquidate() public onlyQB {
