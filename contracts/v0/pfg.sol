@@ -87,8 +87,8 @@ contract PfgV0 {
 
     function liquidate() public onlyQB {
         require(
-            proposalPhase != ProposalState.Paid,
-            "Insufficient funds to liquid"
+            proposalPhase != ProposalState.Paid && proposalPhase != ProposalState.Canceled,
+            "Beyond the phase of liquidation"
         );
 
         emit Withdrawal(address(this).balance, block.timestamp);
