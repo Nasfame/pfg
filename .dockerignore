@@ -12,3 +12,5 @@ cache/
 
 typechain
 typechain-types
+
+.DS_Store

@@ -1,29 +1,118 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "hardhat/console.sol";
+//import "hardhat/console.sol";
+
+enum ProposalState {
+    Accepted,
+    Rejected,
+    Canceled,
+    Paid
+}
 
 contract PfgV0 {
+    uint public deltaUnlockTime = 1209600; //2weeks
     uint public unlockTime;
-    address payable public owner;
 
+    address payable public QB; //Questbook
+    address payable public Grantor;
+    address payable public Grantee;
+
+    // migrate: to types.sol/Proposal struct
+    uint public proposalValue;
+    ProposalState public proposalPhase;
+
+    event Deposit(uint amount, uint when);
     event Withdrawal(uint amount, uint when);
 
     constructor() payable {
-        // Set the unlock time to 2 weeks (1209600 seconds) from the current block timestamp
-        unlockTime = block.timestamp + 1209600;
+        unlockTime = block.timestamp + deltaUnlockTime;
 
-        owner = payable(msg.sender);
+        proposalValue = msg.value;
+        emit Deposit(proposalValue, block.timestamp);
+
+        QB = payable(msg.sender);
+
+        Grantor = QB; //TODO: for simplicity; take from constructor arg.
+
+        Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //TODO: its me; but take from constructor arg
+
+        proposalPhase = ProposalState.Accepted;
     }
 
-    function withdraw() public {
-        // console.log("Unlock time is %o and block timestamp is %o", unlockTime, block.timestamp);
+    modifier onlyQB() {
+        require(msg.sender == QB, "Only QB can call this function");
+        _;
+    }
 
+    modifier onlyGrantee() {
+        require(msg.sender == Grantee, "Only Grantee can call this function");
+        _;
+    }
+
+    modifier onlyGrantor() {
+        require(msg.sender == Grantee, "Only Grantor can call this function");
+        _;
+    }
+
+    modifier readyToWithdraw() {
         require(block.timestamp >= unlockTime, "You can't withdraw yet");
-        require(msg.sender == owner, "You aren't the owner");
+        _;
+    }
+
+    function deposit() public payable onlyGrantor {
+        require(msg.value > 0, "Deposit amount must be greater than 0");
+
+        require(msg.value >= proposalValue, "Insufficient funds to deposit");
+
+        require(proposalPhase != ProposalState.Paid, "Proposal already paid");
+
+        unlockTime = 0;
+        proposalPhase = ProposalState.Paid;
+
+        emit Deposit(msg.value, block.timestamp);
+    }
+
+    function withdraw() public onlyGrantee readyToWithdraw {
+        emit Withdrawal(address(this).balance, block.timestamp);
+
+        uint granteeShare = calcGranteeShare();
+
+        Grantee.transfer(granteeShare);
+
+        uint qbShare = address(this).balance;
+
+        Grantor.transfer(qbShare);
+    }
+
+    function liquidate() public onlyQB {
+        require(
+            proposalPhase != ProposalState.Paid && proposalPhase != ProposalState.Canceled,
+            "Beyond the phase of liquidation"
+        );
 
         emit Withdrawal(address(this).balance, block.timestamp);
 
-        owner.transfer(address(this).balance);
+        QB.transfer(address(this).balance);
+
+        proposalPhase = ProposalState.Canceled;
+
+        // if deposits are made post liquidations, only Grantee can withdraw the amount.
+    }
+
+    function calcGranteeShare()
+        internal
+        view
+        readyToWithdraw
+        returns (uint granteeShare)
+    {
+        uint bal = address(this).balance;
+
+        granteeShare = bal - proposalValue;
+
+        if (granteeShare < 0) {
+            granteeShare = bal;
+        }
+        return granteeShare;
     }
 }

@@ -6,6 +6,8 @@
   "author": "Hiro <laciferin@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "setup": "remixd -i slither",
+    "remixd": "remixd",
     "style": "prettier -w .",
     "start": "hardhat node",
     "build": "hardhat compile",
