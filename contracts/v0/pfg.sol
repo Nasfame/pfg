@@ -21,6 +21,14 @@ contract PfgV0 {
         emit Deposit(initialDeposit, block.timestamp);
     }
 
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit amount must be greater than 0");
+
+        initialDeposit += msg.value;
+
+        emit Deposit(msg.value, block.timestamp);
+    }
+
     function withdraw() public {
         require(block.timestamp >= unlockTime, "You can't withdraw yet");
         require(msg.sender == owner, "You aren't the owner");
