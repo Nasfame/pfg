@@ -54,7 +54,7 @@ contract PfgV0 {
     }
 
     modifier onlyGrantor() {
-        require(msg.sender == Grantee, "Only Grantor can call this function");
+        require(msg.sender == Grantor, "Only Grantor can call this function");
         _;
     }
 
