@@ -25,12 +25,10 @@ contract PfgV0 {
     event Deposit(uint amount, uint when);
     event Withdrawal(uint amount, uint when);
 
-    constructor() payable {
+    constructor() payable proposalValueCheck {
         unlockTime = block.timestamp + deltaUnlockTime;
 
         proposalValue = msg.value;
-
-        require(proposalValue!=0, "Proposal Value needs to be greator than 0");
 
         emit Deposit(proposalValue, block.timestamp);
 
@@ -40,6 +38,8 @@ contract PfgV0 {
 
         Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //TODO: its me; but take from constructor arg
 
+        require(Grantor!=Grantee, "Grantor cannot be Grantee");
+
         proposalPhase = ProposalState.Accepted;
     }
 
@@ -47,6 +47,12 @@ contract PfgV0 {
         require(msg.sender == QB, "Only QB can call this function");
         _;
     }
+
+    modifier proposalValueCheck() {
+        require(proposalValue!=0, "Proposal Value needs to be greator than 0");
+        _;
+    }
+
 
     modifier onlyGrantee() {
         require(msg.sender == Grantee, "Only Grantee can call this function");
