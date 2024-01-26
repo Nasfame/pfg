@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 //import "hardhat/console.sol";
 
-import "../time.sol";
+import "contracts/time.sol";
 
 enum ProposalState {
     Accepted,
