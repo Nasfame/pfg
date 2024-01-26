@@ -57,16 +57,15 @@ contract PfgV0 {
         // TODO: PFG OPEN SHORT
     }
 
-    modifier onlyQB() {
-        require(msg.sender == QB, "Only QB can call this function");
-        _;
-    }
-
     modifier proposalMinValueCheck() {
         require(msg.value>0, "Proposal Value needs to be greator than 0");
         _;
     }
 
+    modifier onlyQB() {
+        require(msg.sender == QB, "Only QB can call this function");
+        _;
+    }
 
     modifier onlyGrantee() {
         require(msg.sender == Grantee, "Only Grantee can call this function");
@@ -83,7 +82,15 @@ contract PfgV0 {
         _;
     }
 
-    function deposit() public payable onlyGrantor proposalMinValueCheck {
+    modifier checkActive(){
+        require(
+            proposalPhase != ProposalState.Paid && proposalPhase != ProposalState.Canceled,
+            "PFG Deactivated"
+        );
+        _;
+    }
+
+    function deposit() public payable checkActive onlyGrantor {
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
 
         require(proposalPhase != ProposalState.Paid, "Proposal already paid");
@@ -94,7 +101,7 @@ contract PfgV0 {
         emit Deposit(msg.value, block.timestamp);
     }
 
-    function withdraw() public onlyGrantee readyToWithdraw {
+    function withdraw() public checkActive onlyGrantee readyToWithdraw {
         // TODO: PFG CLOSE
         uint amount = address(this).balance;
 
@@ -113,12 +120,7 @@ contract PfgV0 {
         Grantor.transfer(qbShare);
     }
 
-    function liquidate() public onlyQB {
-        require(
-            proposalPhase != ProposalState.Paid && proposalPhase != ProposalState.Canceled,
-            "Beyond the phase of liquidation"
-        );
-
+    function liquidate() public checkActive onlyQB {
         emit Withdrawal("QB", address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);
