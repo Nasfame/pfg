@@ -62,4 +62,83 @@ describe("PfgV0", function () {
       expect(await pfg.Grantee()).to.equal(Grantee.address)
     })
   })
+
+  describe("Deposit", function () {
+    it("Should allow the grantor to deposit funds", async function () {
+      const { pfg, Grantor, proposalValue } =
+        await loadFixture(deployPFGFixture)
+
+      await expect(
+        Grantor.sendTransaction({ to: pfg.address, value: proposalValue })
+      )
+        .to.emit(pfg, "Deposit")
+        .withArgs(proposalValue, anyValue)
+    })
+
+    it("Should not allow deposits after the proposal is paid", async function () {
+      const { pfg, Grantor, proposalValue } =
+        await loadFixture(deployPFGFixture)
+
+      await pfg.withdraw()
+      await expect(
+        Grantor.sendTransaction({ to: pfg.address, value: proposalValue })
+      ).to.be.revertedWith("Proposal already paid")
+    })
+
+    it("Should not allow deposits with insufficient funds", async function () {
+      const { pfg, Grantor, proposalValue } =
+        await loadFixture(deployPFGFixture)
+
+      await expect(
+        Grantor.sendTransaction({
+          to: pfg.address,
+          value: proposalValue.sub(ethers.utils.parseEther("0.1")),
+        })
+      ).to.be.revertedWith("Insufficient funds to deposit")
+    })
+  })
+
+  describe("Withdraw", function () {
+    it("Should allow the Grantee to withdraw funds after the unlock time", async function () {
+      const { pfg, Grantee } = await loadFixture(deployPFGFixture)
+      await time.increaseTo((await pfg.unlockTime()).add(10))
+      await expect(pfg.connect(Grantee).withdraw())
+        .to.emit(pfg, "Withdrawal")
+        .withArgs(anyValue, anyValue)
+    })
+
+    it("Should not allow withdrawal before the unlock time", async function () {
+      const { pfg, Grantee } = await loadFixture(deployPFGFixture)
+      await expect(pfg.connect(Grantee).withdraw()).to.be.revertedWith(
+        "You can't withdraw yet"
+      )
+    })
+
+    it("Should not allow withdrawal from a non-grantee account", async function () {
+      const { pfg, Grantor } = await loadFixture(deployPFGFixture)
+      await time.increaseTo((await pfg.unlockTime()).add(1))
+      await expect(pfg.connect(Grantor).withdraw()).to.be.revertedWith(
+        "You aren't the owner"
+      )
+    })
+  })
+
+  describe("Liquidate", function () {
+    it("Should allow the QB to liquidate the contract", async function () {
+      const { pfg, QB } = await loadFixture(deployPFGFixture)
+      await expect(pfg.connect(QB).liquidate())
+        .to.emit(pfg, "Withdrawal")
+        .withArgs(anyValue, anyValue)
+      expect(await ethers.provider.getBalance(pfg.address)).to.equal(0)
+      expect(await pfg.proposalPhase()).to.equal(ProposalState.Canceled)
+    })
+
+    it("Should not allow liquidation after the proposal is paid", async function () {
+      const { pfg, QB } = await loadFixture(deployPFGFixture)
+      await pfg.withdraw()
+      await expect(pfg.connect(QB).liquidate()).to.be.revertedWith(
+        "Beyond the phase of liquidation"
+      )
+    })
+  })
 })
