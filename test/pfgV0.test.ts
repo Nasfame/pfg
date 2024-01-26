@@ -72,9 +72,9 @@ describe("PfgV0", function () {
       const { pfg, Grantor, proposalValue } = await loadFixture(deployPFGFixture);
 
       const pfgI =  pfg.connect(Grantor)
-      expect(pfgI.deposit({value: proposalValue})
+      expect(pfgI.deposit({value: proposalValue}))
           .to.emit(pfg, "Deposit")
-          .withArgs());
+          .withArgs();
     });
 
    /* it("Should not allow deposits after the proposal is paid", async function () {
