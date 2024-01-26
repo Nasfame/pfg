@@ -22,6 +22,7 @@ export const loadAddress = (name: string, privateKey: string) => {
     try {
       const wallet = new Wallet(privateKey);
       address = wallet.address;
+      console.log(name + ": " + address);
     } catch (error:any) {
       console.error(
         `Error deriving address from private key for ${name}: ${error.message}`
