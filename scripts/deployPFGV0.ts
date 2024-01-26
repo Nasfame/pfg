@@ -1,7 +1,7 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/dist/types";
-import { ACCOUNTS, ACCOUNT_ADDRESSES } from "utils/accounts";
+import { ACCOUNTS, ACCOUNT_ADDRESSES } from "../utils/accounts";
 
 const deployPFG: DeployFunction = async function deployPFG({
   deployments,
