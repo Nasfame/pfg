@@ -1,13 +1,13 @@
-import { HardhatUserConfig } from "hardhat/config"
-import "@nomicfoundation/hardhat-toolbox"
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
-import "hardhat-deploy"
+import "hardhat-deploy";
 
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-dotenv.config({ path: ".env" })
+dotenv.config({ path: ".env" });
 
-import { ACCOUNT_ADDRESSES, PRIVATE_KEYS } from "./utils/accounts"
+import { ACCOUNT_ADDRESSES, PRIVATE_KEYS } from "./utils/accounts";
 const config: HardhatUserConfig = {
   defaultNetwork: "local",
   networks: {
@@ -64,6 +64,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 40000,
   },
-}
+};
 
-export default config
+export default config;
