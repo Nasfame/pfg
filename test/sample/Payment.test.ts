@@ -22,7 +22,7 @@ describe("Payment", function () {
         const expectedAmount = ethers.parseUnits("2", "ether");
 
         await expect(
-          payment.deposit(expectedAmount, { value: depositAmount })
+          payment.deposit(expectedAmount, { value: depositAmount }),
         ).to.be.revertedWith("Invalid deposit amount");
       });
     });

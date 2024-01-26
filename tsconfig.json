@@ -5,9 +5,7 @@
     "./test",
     "./utils/*.ts",
   ],
-  "exclude": [
-    "./tests/sample/*.test.ts",
-  ],
+  "exclude": ["./tests/sample/*.test.ts"],
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
@@ -33,9 +31,9 @@
     "noUnusedParameters": false,
     "resolveJsonModule": true,
   },
-   "paths": {
-        "@utils/*": ["./utils/*"],
-        "@test/*": ["./test/*"],
-        "@scripts/*": ["./scripts/*"],
-    }
+  "paths": {
+    "@utils/*": ["./utils/*"],
+    "@test/*": ["./test/*"],
+    "@scripts/*": ["./scripts/*"],
+  },
 }
