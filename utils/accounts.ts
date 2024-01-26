@@ -56,7 +56,15 @@ export const ACCOUNTS: Account[] = [
       "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a"
     ),
   },
-];
+].map((account:Account) => {
+  // Check if the address is not already present
+  if (!account.address) {
+    // Derive the address using the loadAddress function
+    account.address = loadAddress(account.name, account.privateKey);
+  }
+
+  return account
+});
 
 // map of account name -> account
 export const NAMED_ACCOUNTS = ACCOUNTS.reduce<Record<string, Account>>(
