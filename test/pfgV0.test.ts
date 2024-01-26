@@ -21,7 +21,7 @@ describe("PfgV0", function () {
 
     const proposalValue = PROPOSAL_VALUE
 
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS //TODO:
+    // const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS //TODO:
 
     // Contracts are deployed using the first signer/account by default
     const [QB, Grantor, Grantee] = await ethers.getSigners()
@@ -32,7 +32,6 @@ describe("PfgV0", function () {
 
     return {
       pfg,
-      unlockTime,
       proposalValue,
       owner: QB,
       QB,
