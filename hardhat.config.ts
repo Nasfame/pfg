@@ -34,6 +34,17 @@ const config: HardhatUserConfig = {
       ],
       tags: ["testnet", "lilypad"],
     },
+     hardhat: {
+        accounts: [
+            {
+                privateKey: process.env.PRIVATE_KEY || '14a408e888e69424e2ffff167ec009ec3b858ddcd7534bb6a19d9501687997a2',
+                balance: `${1000000000000000000000000n}`,
+            },
+        ],
+    },
+  },
+  etherscan: {
+        apiKey: process.env.ETHERSCAN_API_KEY,
   },
   solidity: {
     version: "0.8.20",
