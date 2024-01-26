@@ -1,5 +1,5 @@
 {
-  "include": ["./hardhat.config.ts", "./scripts", "./deploy", "./test", "utils/accounts.ts", "utils/types.ts"],
+  "include": ["./hardhat.config.ts", "./scripts", "./deploy", "./test", "utils/accounts.ts", "utils/types.ts", "scripts"],
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
