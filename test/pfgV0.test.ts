@@ -149,13 +149,16 @@ describe("PfgV0", function () {
     });
   });
 
+  const getBal = async (addr: string) => {
+    return ethers.provider.getBalance(addr);
+  };
+
   describe("Liquidate", function () {
     it("Should allow the QB to liquidate the contract", async function () {
       const { pfg, QB, pfgQB } = await loadFixture(deployPFGFixture);
       expect(await pfgQB.liquidate()).to.emit(pfg, "Withdrawal");
       expect(await pfg.proposalPhase()).to.equal(2);
-
-      // expect(await ethers.provider.getBalance(pfg.address)).to.equal(0);
+      expect(await getBal(await pfg.getAddress())).to.equal(0);
     });
 
     /*   it("Should not allow liquidation after the proposal is paid", async function () {
