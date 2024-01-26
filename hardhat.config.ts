@@ -8,9 +8,6 @@ import dotenv from "dotenv"
 dotenv.config({ path: ".env" })
 
 import { ACCOUNT_ADDRESSES, PRIVATE_KEYS } from "./utils/accounts"
-
-console.log("PKs", PRIVATE_KEYS)
-
 const config: HardhatUserConfig = {
   defaultNetwork: "local",
   networks: {
