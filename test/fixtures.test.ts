@@ -31,14 +31,8 @@ export async function deployPFGV0(
   return deployContract<any>("PFGV0", signer, [])
 }
 
-export async function setupPFGV0Fixture({
-  testMode = false,
-  withFunds = false,
-}: {
-  testMode?: boolean
-  withFunds?: boolean
-}) {
+export async function setupPFGV0Fixture() {
   const QB = getWallet("QB")
-  const pfg = await deployPFG(QB)
+  const pfg = await deployPFGV0(QB)
   return pfg
 }
