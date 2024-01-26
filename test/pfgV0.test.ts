@@ -94,11 +94,9 @@ describe("PfgV0", function () {
 
       expect(await pfg.proposalPhase()).to.equal(3);
 
-      // await pfgGrantee.withdraw()
-      //
-      // expect(await pfgGrantor.deposit({value: proposalValue}))
-      //     .to.emit(pfg, "Deposit")
-      //     .to.be.revertedWith("Proposal already paid")
+      expect(await pfgGrantor.deposit({ value: proposalValue }))
+        .to.emit(pfg, "Deposit")
+        .to.be.revertedWith("PFG Deactivated");
     });
     /*
     it("Should not allow deposits with insufficient funds", async function () {
