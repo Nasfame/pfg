@@ -8,7 +8,7 @@ import { ethers } from "hardhat"
 
 import moment from "moment"
 
-describe("PFGV0", function () {
+describe("PfgV0", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
@@ -18,33 +18,39 @@ describe("PFGV0", function () {
 
     const ONE_GWEI = 1_000_000_000
 
-    const lockedAmount = ONE_GWEI
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS
+    const PROPOSAL_VALUE = ethers.parseEther(
+      process.env.PROPOSAL_VALUE || "0.2"
+    )
+
+    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS //TODO:
 
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await ethers.getSigners()
 
-    const Lock = await ethers.getContractFactory("Lock")
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount })
+    const PFG = await ethers.getContractFactory("PfgV0")
+    // const pfg = await PFG.deploy(unlockTime, { value: PROPOSAL_VALUE }) TODO:
+    const pfg = await PFG.deploy([], { value: PROPOSAL_VALUE })
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount }
+    return {
+      pfg: pfg,
+      unlockTime,
+      lockedAmount: PROPOSAL_VALUE,
+      owner,
+      otherAccount,
+    }
   }
 
   describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
-      const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture)
-
-      expect(await lock.unlockTime()).to.equal(unlockTime)
-    })
-
     it("Should set the right owner", async function () {
-      const { lock, owner } = await loadFixture(deployOneYearLockFixture)
+      const { pfg: lock, owner } = await loadFixture(deployOneYearLockFixture)
 
       expect(await lock.owner()).to.equal(owner.address)
     })
 
     it("Should receive and store the funds to lock", async function () {
-      const { lock, lockedAmount } = await loadFixture(deployOneYearLockFixture)
+      const { pfg: lock, lockedAmount } = await loadFixture(
+        deployOneYearLockFixture
+      )
 
       expect(await ethers.provider.getBalance(lock.target)).to.equal(
         lockedAmount
@@ -64,7 +70,7 @@ describe("PFGV0", function () {
   describe("Withdrawals", function () {
     describe("Validations", function () {
       it("Should revert with the right error if called too soon", async function () {
-        const { lock } = await loadFixture(deployOneYearLockFixture)
+        const { pfg: lock } = await loadFixture(deployOneYearLockFixture)
 
         await expect(lock.withdraw()).to.be.revertedWith(
           "You can't withdraw yet"
@@ -72,9 +78,11 @@ describe("PFGV0", function () {
       })
 
       it("Should revert with the right error if called from another account", async function () {
-        const { lock, unlockTime, otherAccount } = await loadFixture(
-          deployOneYearLockFixture
-        )
+        const {
+          pfg: lock,
+          unlockTime,
+          otherAccount,
+        } = await loadFixture(deployOneYearLockFixture)
 
         // We can increase the time in Hardhat Network
         await time.increaseTo(unlockTime)
@@ -86,7 +94,9 @@ describe("PFGV0", function () {
       })
 
       it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-        const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture)
+        const { pfg: lock, unlockTime } = await loadFixture(
+          deployOneYearLockFixture
+        )
 
         // Transactions are sent using the first signer by default
         await time.increaseTo(unlockTime)
@@ -97,9 +107,11 @@ describe("PFGV0", function () {
 
     describe("Events", function () {
       it("Should emit an event on withdrawals", async function () {
-        const { lock, unlockTime, lockedAmount } = await loadFixture(
-          deployOneYearLockFixture
-        )
+        const {
+          pfg: lock,
+          unlockTime,
+          lockedAmount,
+        } = await loadFixture(deployOneYearLockFixture)
 
         await time.increaseTo(unlockTime)
 
@@ -111,9 +123,12 @@ describe("PFGV0", function () {
 
     describe("Transfers", function () {
       it("Should transfer the funds to the owner", async function () {
-        const { lock, unlockTime, lockedAmount, owner } = await loadFixture(
-          deployOneYearLockFixture
-        )
+        const {
+          pfg: lock,
+          unlockTime,
+          lockedAmount,
+          owner,
+        } = await loadFixture(deployOneYearLockFixture)
 
         await time.increaseTo(unlockTime)
 
