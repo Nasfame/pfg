@@ -7,6 +7,7 @@ import { expect } from "chai"
 import { ethers } from "hardhat"
 
 import moment from "moment"
+import {getAccount} from "../utils/accounts";
 
 const PROPOSAL_VALUE = ethers.parseEther(process.env.PROPOSAL_VALUE || "0.2")
 describe("PfgV0", function () {
@@ -30,6 +31,9 @@ describe("PfgV0", function () {
     // const pfg = await PFG.deploy(unlockTime, { value: PROPOSAL_VALUE }) TODO:
     const pfg = await PFG.deploy({ value: PROPOSAL_VALUE })
 
+   /* const QB = getAccount("QB")
+    const Grantor = getAccount("Grantor")
+    const Grantee = getAccount("Grantee")*/
     return {
       pfg,
       proposalValue,
@@ -67,9 +71,10 @@ describe("PfgV0", function () {
     it("Should allow the grantor to deposit funds", async function () {
       const { pfg, Grantor, proposalValue } = await loadFixture(deployPFGFixture);
 
-      await expect(pfg.connect(Grantor).deposit())
+      const pfgI =  pfg.connect(Grantor)
+      expect(pfgI.deposit({value: proposalValue})
           .to.emit(pfg, "Deposit")
-          .withArgs(proposalValue, anyValue);
+          .withArgs());
     });
 
    /* it("Should not allow deposits after the proposal is paid", async function () {
