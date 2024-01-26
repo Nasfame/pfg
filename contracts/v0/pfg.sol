@@ -10,9 +10,19 @@ enum ProposalState {
     Paid
 }
 
+type TIME is uint;
+
+
 contract PfgV0 {
-    uint public deltaUnlockTime = 1209600; //2weeks
-    uint public unlockTime;
+    TIME public deltaUnlockTime = 2 * WEEK; 
+    TIME public unlockTime;
+    
+    TIME private constant SECOND=1;
+    TIME private constant MINUTE=60*SECOND;
+    TIME private constant HOUR=60*MINUTE;
+    TIME private constant DAY = 24 * HOUR;
+    TIME private constant WEEK = 7 * DAY;
+    TIME private constant MONTH = 30 * DAY; // Note: This is a simplified approximation
 
     address payable public QB; //Questbook
     address payable public Grantor;
@@ -127,5 +137,9 @@ contract PfgV0 {
             granteeShare = bal;
         }
         return granteeShare;
+    }
+
+    function convertTimstamp(uint timestamp) public pure returns (uint year, uint month, uint day, uint hour, uint minute, uint second) {
+         return DateTime.timestampToDateTime(timestamp);
     }
 }
