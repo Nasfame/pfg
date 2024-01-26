@@ -28,7 +28,7 @@ describe("PfgV0", function () {
 
     const PFG = await ethers.getContractFactory("PfgV0")
     // const pfg = await PFG.deploy(unlockTime, { value: PROPOSAL_VALUE }) TODO:
-    const pfg = await PFG.deploy([], { value: PROPOSAL_VALUE })
+    const pfg = await PFG.deploy({ value: PROPOSAL_VALUE })
 
     return {
       pfg,
