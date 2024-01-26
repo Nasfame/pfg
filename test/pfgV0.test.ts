@@ -134,13 +134,13 @@ describe("PfgV0", function () {
       );
     });
 
-    /*   it("Should not allow withdrawal from a non-grantee account", async function () {
+    it("Should not allow withdrawal from a Grantee account", async function () {
       const { pfg, Grantor } = await loadFixture(deployPFGFixture);
-      await time.increaseTo((await pfg.unlockTime()).add(1));
+      await time.increaseTo(await pfg.unlockTime());
       await expect(pfg.connect(Grantor).withdraw()).to.be.revertedWith(
-        "You aren't the owner",
+        "Only Grantee can call this function",
       );
-    });*/
+    });
   });
 
   /*  describe("Liquidate", function () {
