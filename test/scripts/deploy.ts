@@ -1,7 +1,11 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers } from "hardhat";
 
-async function main({ deployments, getNamedAccounts, network }: HardhatRuntimeEnvironment) {
+async function main({
+  deployments,
+  getNamedAccounts,
+  network,
+}: HardhatRuntimeEnvironment) {
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
@@ -23,7 +27,13 @@ async function main({ deployments, getNamedAccounts, network }: HardhatRuntimeEn
   const pfgInstance = await ethers.getContractAt("PfgV0", PfgV0.address);
 
   // Perform initialization
-  await pfgInstance.initialize(QB_ADDRESS, GRANTOR_ADDRESS, GRANTEE_ADDRESS, DELTA_UNLOCK_TIME, PROPOSAL_VALUE);
+  await pfgInstance.initialize(
+    QB_ADDRESS,
+    GRANTOR_ADDRESS,
+    GRANTEE_ADDRESS,
+    DELTA_UNLOCK_TIME,
+    PROPOSAL_VALUE,
+  );
 
   console.log("PfgV0 deployed to:", PfgV0.address);
 }
