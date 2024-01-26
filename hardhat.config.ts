@@ -1,15 +1,18 @@
-import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
+import { HardhatUserConfig } from "hardhat/config"
+import "@nomicfoundation/hardhat-toolbox"
 
-import "hardhat-deploy";
+import "hardhat-deploy"
 
-import dotenv from "dotenv";
+import dotenv from "dotenv"
 
-dotenv.config({ path: ".env" });
+const ENV_FILE = process.env.DOTENV_CONFIG_PATH || "./.env"
+dotenv.config({ path: ENV_FILE })
 
-import { ACCOUNT_ADDRESSES, PRIVATE_KEYS } from "./utils/accounts";
+const NETWORK = process.env.NETWORK || "lilypad"
+
+import { ACCOUNT_ADDRESSES, PRIVATE_KEYS } from "./utils/accounts"
 const config: HardhatUserConfig = {
-  defaultNetwork: "local",
+  defaultNetwork: NETWORK,
   networks: {
     // Add your network configurations here
     sepolia: {
@@ -64,6 +67,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 40000,
   },
-};
+}
 
-export default config;
+export default config

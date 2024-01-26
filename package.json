@@ -18,6 +18,7 @@
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
     "deploy:mumbai": "hardhat run scripts/deploy.ts --network mumbai",
     "deploy:local": "hardhat run scripts/deploy.ts --network local",
+    "deploy:lilypad": "hardhat run scripts/deploy.ts --network lilypad",
     "test": "hardhat test",
     "test:sepolia": "hardhat test --network sepolia",
     "test:mumbai": "hardhat test --network mumbai",
