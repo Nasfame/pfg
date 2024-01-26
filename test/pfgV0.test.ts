@@ -8,6 +8,18 @@ import { ethers } from "hardhat";
 
 import moment from "moment";
 import { getAccount } from "../utils/accounts";
+import { rpcNewBlockTag } from "hardhat/internal/core/jsonrpc/types/input/blockTag";
+
+async function getBalance(address: string) {
+  const provider = ethers.provider;
+  // Get the balance of the address
+  const balance = await provider.getBalance(address);
+
+  // Print the balance to the console
+  console.log(`Balance of ${address}: ${ethers.formatEther(balance)} ETH`);
+
+  return balance;
+}
 
 const PROPOSAL_VALUE = ethers.parseEther(process.env.PROPOSAL_VALUE || "0.2");
 describe("PfgV0", function () {
@@ -82,6 +94,8 @@ describe("PfgV0", function () {
       expect(await pfgI.deposit({ value: proposalValue }))
         .to.emit(pfg, "Deposit")
         .withArgs();
+
+      expect(await ethers.provider.getBalance(await pfg.getAddress())).to.gt(0);
     });
 
     it("Should not allow deposits after the proposal is paid", async function () {
@@ -106,7 +120,7 @@ describe("PfgV0", function () {
 
       expect(await pfg.proposalPhase()).to.equal(0);
       await expect(
-        pfgGrantor.deposit({ value: ethers.parseEther("0.0000001") }),
+        pfgGrantor.deposit({ value: ethers.parseEther("0.0000000001") }),
       ).to.be.revertedWith("Insufficient funds to deposit");
     });
   });
