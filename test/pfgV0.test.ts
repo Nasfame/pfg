@@ -96,8 +96,8 @@ describe("PfgV0", function () {
 
       expect(await pfg.proposalPhase()).to.equal(3);
 
-      expect(
-        await pfgGrantor.deposit({ value: proposalValue }),
+      await expect(
+        pfgGrantor.deposit({ value: proposalValue }),
       ).to.be.revertedWith("PFG Deposits Disabled");
     });
     it("Should not allow deposits with insufficient funds", async function () {
@@ -105,8 +105,8 @@ describe("PfgV0", function () {
         await loadFixture(deployPFGFixture);
 
       expect(await pfg.proposalPhase()).to.equal(0);
-      expect(
-        await pfgGrantor.deposit({ value: ethers.parseEther("0.0000001") }),
+      await expect(
+        pfgGrantor.deposit({ value: ethers.parseEther("0.0000001") }),
       ).to.be.revertedWith("Insufficient funds to deposit");
     });
   });
