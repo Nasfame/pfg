@@ -1,11 +1,11 @@
-import { HardhatUserConfig } from "hardhat/config"
-import "@nomicfoundation/hardhat-toolbox"
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
-import "hardhat-deploy"
+import "hardhat-deploy";
 
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-dotenv.config({path: '.env'})
+dotenv.config({ path: ".env" });
 
 const config: HardhatUserConfig = {
   defaultNetwork: "local",
@@ -62,6 +62,6 @@ const config: HardhatUserConfig = {
       goerli: "0x84b9514E013710b9dD0811c9Fe46b837a4A0d8E0", //it can also specify a specific netwotk name (specified in hardhat.config.js)
     },
   },
-}
+};
 
-export default config
+export default config;
