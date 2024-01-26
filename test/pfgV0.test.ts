@@ -32,7 +32,7 @@ describe("PfgV0", function () {
     const pfg = await PFG.deploy([], { value: PROPOSAL_VALUE })
 
     return {
-      pfg: pfg,
+      pfg,
       unlockTime,
       lockedAmount: PROPOSAL_VALUE,
       owner,
@@ -47,10 +47,10 @@ describe("PfgV0", function () {
       expect(await pfg.owner()).to.equal(owner.address)
     })
 
-    it("Should receive and store the funds to lock", async function () {
-      const { pfg: lock, lockedAmount } = await loadFixture(deployPFGFixture)
+    it("Should receive and store the funds to pfg", async function () {
+      const { pfg, lockedAmount } = await loadFixture(deployPFGFixture)
 
-      expect(await ethers.provider.getBalance(lock.target)).to.equal(
+      expect(await ethers.provider.getBalance(pfg.target)).to.equal(
         lockedAmount
       )
     })
@@ -68,68 +68,58 @@ describe("PfgV0", function () {
   describe("Withdrawals", function () {
     describe("Validations", function () {
       it("Should revert with the right error if called too soon", async function () {
-        const { pfg: lock } = await loadFixture(deployPFGFixture)
+        const { pfg } = await loadFixture(deployPFGFixture)
 
-        await expect(lock.withdraw()).to.be.revertedWith(
+        await expect(pfg.withdraw()).to.be.revertedWith(
           "You can't withdraw yet"
         )
       })
 
       it("Should revert with the right error if called from another account", async function () {
-        const {
-          pfg: lock,
-          unlockTime,
-          otherAccount,
-        } = await loadFixture(deployPFGFixture)
+        const { pfg, unlockTime, otherAccount } =
+          await loadFixture(deployPFGFixture)
 
         // We can increase the time in Hardhat Network
         await time.increaseTo(unlockTime)
 
-        // We use lock.connect() to send a transaction from another account
-        await expect(lock.connect(otherAccount).withdraw()).to.be.revertedWith(
+        // We use pfg.connect() to send a transaction from another account
+        await expect(pfg.connect(otherAccount).withdraw()).to.be.revertedWith(
           "You aren't the owner"
         )
       })
 
       it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-        const { pfg: lock, unlockTime } = await loadFixture(deployPFGFixture)
+        const { pfg, unlockTime } = await loadFixture(deployPFGFixture)
 
         // Transactions are sent using the first signer by default
         await time.increaseTo(unlockTime)
 
-        await expect(lock.withdraw()).not.to.be.reverted
+        await expect(pfg.withdraw()).not.to.be.reverted
       })
     })
 
     describe("Events", function () {
       it("Should emit an event on withdrawals", async function () {
-        const {
-          pfg: lock,
-          unlockTime,
-          lockedAmount,
-        } = await loadFixture(deployPFGFixture)
+        const { pfg, unlockTime, lockedAmount } =
+          await loadFixture(deployPFGFixture)
 
         await time.increaseTo(unlockTime)
 
-        await expect(lock.withdraw())
-          .to.emit(lock, "Withdrawal")
+        await expect(pfg.withdraw())
+          .to.emit(pfg, "Withdrawal")
           .withArgs(lockedAmount, anyValue) // We accept any value as `when` arg
       })
     })
 
     describe("Transfers", function () {
       it("Should transfer the funds to the owner", async function () {
-        const {
-          pfg: lock,
-          unlockTime,
-          lockedAmount,
-          owner,
-        } = await loadFixture(deployPFGFixture)
+        const { pfg, unlockTime, lockedAmount, owner } =
+          await loadFixture(deployPFGFixture)
 
         await time.increaseTo(unlockTime)
 
-        await expect(lock.withdraw()).to.changeEtherBalances(
-          [owner, lock],
+        await expect(pfg.withdraw()).to.changeEtherBalances(
+          [owner, pfg],
           [lockedAmount, -lockedAmount]
         )
       })
