@@ -5,10 +5,9 @@ import "hardhat-deploy"
 
 import dotenv from "dotenv"
 
-dotenv.config({path: '.env'})
+dotenv.config({ path: ".env" })
 
-import {ACCOUNT_ADDRESSES, PRIVATE_KEYS,} from './utils/accounts'
-
+import { ACCOUNT_ADDRESSES, PRIVATE_KEYS } from "./utils/accounts"
 
 const config: HardhatUserConfig = {
   defaultNetwork: "local",
@@ -16,38 +15,37 @@ const config: HardhatUserConfig = {
     // Add your network configurations here
     sepolia: {
       url: `https://sepolia.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-      accounts: [process.env.PRIVATE_KEY ?? ""],
+      accounts: PRIVATE_KEYS,
       tags: ["mainnet"],
     },
     mumbai: {
       url: `https://polygon-mumbai.infura.io/v3/${process.env.INFURA_PROJECT_ID}`,
-      accounts: [process.env.PRIVATE_KEY ?? ""],
+      accounts: PRIVATE_KEYS,
       tags: ["testnet"],
     },
     local: {
       url: "http://127.0.0.1:8545",
-      tags: ["local"],
+      tags: ["local", "geth"],
+      accounts: PRIVATE_KEYS,
     },
     lilypad: {
       url: "http://testnet.lilypad.tech:8545",
-      accounts: [
-        process.env.QB_PRIVATE_KEY,
-        process.env.GRANTOR_PRIVATE_KEY,
-        process.env.GRANTEE_PRIVATE_KEY,
-      ],
+      accounts: PRIVATE_KEYS,
       tags: ["testnet", "lilypad"],
     },
-     hardhat: {
-        accounts: [
-            {
-                privateKey: process.env.PRIVATE_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
-                balance: `${1000000000000000000000000n}`,
-            },
-        ],
+    hardhat: {
+      accounts: [
+        {
+          privateKey:
+            process.env.PRIVATE_KEY ||
+            "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+          balance: `${1000000000000000000000000n}`,
+        },
+      ],
     },
   },
   etherscan: {
-        apiKey: process.env.ETHERSCAN_API_KEY,
+    apiKey: process.env.ETHERSCAN_API_KEY,
   },
   solidity: {
     version: "0.8.20",
