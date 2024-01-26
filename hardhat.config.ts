@@ -60,7 +60,7 @@ const config: HardhatUserConfig = {
           privateKey:
             process.env.GRANTEE_PRIVATE_KEY ||
             "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a", //hardhat 03
-          balance: ethers.parseEther("1000").toString(),
+          balance: ethers.parseEther("0.5").toString(),
         },
       ],
     },
