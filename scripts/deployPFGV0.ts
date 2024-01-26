@@ -2,7 +2,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/dist/types";
 
-const deployPFG: DeployFunction  = async function deployPFG({
+const deployPFG: DeployFunction = async function deployPFG({
   deployments,
   getNamedAccounts,
   network,
@@ -37,12 +37,11 @@ const deployPFG: DeployFunction  = async function deployPFG({
   );
 
   console.log("PfgV0 deployed to:", PfgV0.address);
-  return true
-}
+  return true;
+};
 
 deployPFG.id = "PfgV0";
 
 deployPFG.tags = ["PfgV0"];
 
 export default deployPFG;
-
