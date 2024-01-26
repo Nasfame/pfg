@@ -1,25 +1,12 @@
 import {
-  time,
   loadFixture,
+  time,
 } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import moment from "moment";
-import { getAccount } from "../utils/accounts";
-import { rpcNewBlockTag } from "hardhat/internal/core/jsonrpc/types/input/blockTag";
-
-async function getBalance(address: string) {
-  const provider = ethers.provider;
-  // Get the balance of the address
-  const balance = await provider.getBalance(address);
-
-  // Print the balance to the console
-  console.log(`Balance of ${address}: ${ethers.formatEther(balance)} ETH`);
-
-  return balance;
-}
 
 const PROPOSAL_VALUE = ethers.parseEther(process.env.PROPOSAL_VALUE || "0.2");
 describe("PfgV0", function () {
@@ -127,9 +114,10 @@ describe("PfgV0", function () {
 
   describe("Withdraw", function () {
     it("Should allow the Grantee to withdraw funds after the unlock time", async function () {
-      const { pfg, Grantee } = await loadFixture(deployPFGFixture);
+      const { pfg, Grantee, pfgGrantee } = await loadFixture(deployPFGFixture);
+
       await time.increaseTo((await pfg.unlockTime()).add(10));
-      await expect(pfg.connect(Grantee).withdraw())
+      expect(await pfgGrantee.withdraw())
         .to.emit(pfg, "Withdrawal")
         .withArgs(anyValue, anyValue);
     });
