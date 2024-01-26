@@ -12,6 +12,12 @@ enum ProposalState {
     Paid
 }
 
+enum ParticipantEnum {
+    QUESTBOOK,
+    GRANTOR,
+    GRANTEE
+}
+
 contract PfgV0 {
     using TimeLib for uint256;
     uint256 public deltaUnlockTime;
@@ -28,9 +34,9 @@ contract PfgV0 {
     ProposalState public proposalPhase;
 
     event Deposit(uint amount, uint when);
-    event Withdrawal(uint amount, uint when);
+    event Withdrawal(string name, uint amount, uint when);
 
-    constructor() payable proposalValueCheck {
+    constructor() payable proposalMinValueCheck {
         deltaUnlockTime = 2 * TimeLib.WEEK;
         
         unlockTime = block.timestamp + deltaUnlockTime;
@@ -56,7 +62,7 @@ contract PfgV0 {
         _;
     }
 
-    modifier proposalValueCheck() {
+    modifier proposalMinValueCheck() {
         require(msg.value>0, "Proposal Value needs to be greator than 0");
         _;
     }
@@ -73,11 +79,11 @@ contract PfgV0 {
     }
 
     modifier readyToWithdraw() {
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
+        require(block.timestamp >= unlockTime || proposalPhase==ProposalState.Paid, "You can't withdraw yet");
         _;
     }
 
-    function deposit() public payable onlyGrantor proposalValueCheck {
+    function deposit() public payable onlyGrantor proposalMinValueCheck {
         require(msg.value > 0, "Deposit amount must be greater than 0");
 
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
@@ -91,15 +97,20 @@ contract PfgV0 {
     }
 
     function withdraw() public onlyGrantee readyToWithdraw {
-        emit Withdrawal(address(this).balance, block.timestamp);
-
         // TODO: PFG CLOSE
+        uint amount = address(this).balance;
+
+        emit Withdrawal("PFG", amount, block.timestamp);
 
         uint granteeShare = calcGranteeShare();
+
+        emit Withdrawal("Grantee", granteeShare, block.timestamp);
 
         Grantee.transfer(granteeShare);
 
         uint qbShare = address(this).balance;
+
+        emit Withdrawal("QB", qbShare, block.timestamp);
 
         Grantor.transfer(qbShare);
     }
@@ -110,7 +121,7 @@ contract PfgV0 {
             "Beyond the phase of liquidation"
         );
 
-        emit Withdrawal(address(this).balance, block.timestamp);
+        emit Withdrawal("QB", address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);
 
@@ -122,7 +133,6 @@ contract PfgV0 {
     function calcGranteeShare()
         internal
         view
-        readyToWithdraw
         returns (uint granteeShare)
     {
         uint bal = address(this).balance;
