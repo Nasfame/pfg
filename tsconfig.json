@@ -1,4 +1,13 @@
 {
+  "include": [
+    "./hardhat.config.ts",
+    "./scripts",
+    "scripts",
+    "./test",
+    "utils/accounts.ts",
+    "utils/types.ts",
+    "scripts",
+  ],
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,
@@ -22,6 +31,6 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "resolveJsonModule": true
-  }
+    "resolveJsonModule": true,
+  },
 }

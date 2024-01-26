@@ -3,6 +3,8 @@ pragma solidity ^0.8.20;
 
 //import "hardhat/console.sol";
 
+import "contracts/time.sol";
+
 enum ProposalState {
     Accepted,
     Rejected,
@@ -10,15 +12,21 @@ enum ProposalState {
     Paid
 }
 
+type TIME is int;
+
+
 contract PfgV0 {
-    uint public deltaUnlockTime = 1209600; //2weeks
-    uint public unlockTime;
+    using TimeLib for uint256;
+    uint256 public deltaUnlockTime;
+
+    uint256 public unlockTime;
+
 
     address payable public QB; //Questbook
     address payable public Grantor;
     address payable public Grantee;
 
-    // migrate: to types.sol/Proposal struct
+    //TODO: migrate: to types.sol/Proposal struct
     uint public proposalValue;
     ProposalState public proposalPhase;
 
@@ -26,6 +34,8 @@ contract PfgV0 {
     event Withdrawal(uint amount, uint when);
 
     constructor() payable proposalValueCheck {
+        deltaUnlockTime = 2 * TimeLib.WEEK;
+        
         unlockTime = block.timestamp + deltaUnlockTime;
 
         proposalValue = msg.value;
@@ -34,13 +44,14 @@ contract PfgV0 {
 
         QB = payable(msg.sender);
 
-        Grantor = QB; //TODO: for simplicity; take from constructor arg.
+        Grantor = payable(0x09308A2577499f1fCDDfa4d5572e2e7e08f2C51D); //PFG
 
-        Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //TODO: its me; but take from constructor arg
-
+        Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //HIRO
         require(Grantor!=Grantee, "Grantor cannot be Grantee");
 
         proposalPhase = ProposalState.Accepted;
+
+        // TODO: PFG OPEN SHORT
     }
 
     modifier onlyQB() {
@@ -84,6 +95,8 @@ contract PfgV0 {
 
     function withdraw() public onlyGrantee readyToWithdraw {
         emit Withdrawal(address(this).balance, block.timestamp);
+
+        // TODO: PFG CLOSE
 
         uint granteeShare = calcGranteeShare();
 
