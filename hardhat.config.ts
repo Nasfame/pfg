@@ -21,14 +21,13 @@ const config: HardhatUserConfig = {
       url: "http://127.0.0.1:8545",
     },
     lilypad: {
-      url: 'http://testnet.lilypad.tech:8545',
+      url: "http://testnet.lilypad.tech:8545",
       accounts: [
         process.env.GRANTEE_PRIVATE_KEY,
         process.env.GRANTOR_PRIVATE_KEY,
         process.env.QB_PRIVATE_KEY,
-      ]
-    }
-
+      ],
+    },
   },
   solidity: {
     version: "0.8.20",
