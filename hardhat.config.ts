@@ -25,9 +25,9 @@ const config: HardhatUserConfig = {
     lilypad: {
       url: "http://testnet.lilypad.tech:8545",
       accounts: [
-        process.env.GRANTEE_PRIVATE_KEY,
-        process.env.GRANTOR_PRIVATE_KEY,
         process.env.QB_PRIVATE_KEY,
+        process.env.GRANTOR_PRIVATE_KEY,
+        process.env.GRANTEE_PRIVATE_KEY,
       ],
     },
   },
