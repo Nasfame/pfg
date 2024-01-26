@@ -62,7 +62,6 @@ export const ACCOUNTS: Account[] = [
     // Derive the address using the loadAddress function
     account.address = loadAddress(account.name, account.privateKey);
   }
-
   return account
 });
 
