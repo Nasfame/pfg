@@ -12,8 +12,11 @@ enum ProposalState {
     Paid
 }
 
-type TIME is int;
-
+enum ParticipantEnum {
+    QUESTBOOK,
+    GRANTOR,
+    GRANTEE
+}
 
 contract PfgV0 {
     using TimeLib for uint256;
@@ -31,11 +34,11 @@ contract PfgV0 {
     ProposalState public proposalPhase;
 
     event Deposit(uint amount, uint when);
-    event Withdrawal(uint amount, uint when);
+    event Withdrawal(string name, uint amount, uint when);
 
-    constructor() payable proposalValueCheck {
+    constructor() payable proposalMinValueCheck {
         deltaUnlockTime = 2 * TimeLib.WEEK;
-        
+
         unlockTime = block.timestamp + deltaUnlockTime;
 
         proposalValue = msg.value;
@@ -54,16 +57,15 @@ contract PfgV0 {
         // TODO: PFG OPEN SHORT
     }
 
-    modifier onlyQB() {
-        require(msg.sender == QB, "Only QB can call this function");
-        _;
-    }
-
-    modifier proposalValueCheck() {
+    modifier proposalMinValueCheck() {
         require(msg.value>0, "Proposal Value needs to be greator than 0");
         _;
     }
 
+    modifier onlyQB() {
+        require(msg.sender == QB, "Only QB can call this function");
+        _;
+    }
 
     modifier onlyGrantee() {
         require(msg.sender == Grantee, "Only Grantee can call this function");
@@ -76,16 +78,29 @@ contract PfgV0 {
     }
 
     modifier readyToWithdraw() {
-        require(block.timestamp >= unlockTime, "You can't withdraw yet");
+        require(block.timestamp >= unlockTime || proposalPhase==ProposalState.Paid, "You can't withdraw yet");
         _;
     }
 
-    function deposit() public payable onlyGrantor proposalValueCheck {
-        require(msg.value > 0, "Deposit amount must be greater than 0");
+    modifier checkActive(){
+        require(
+            proposalPhase != ProposalState.Canceled,
+            "PFG Deactivated"
+        );
+        _;
+    }
 
+    modifier depositsEnabled(){
+        require(
+            proposalPhase != ProposalState.Paid,
+            "PFG Deposits Disabled"
+        );
+        _;
+    }
+
+
+    function deposit() public payable checkActive onlyGrantor depositsEnabled {
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
- 
-        require(proposalPhase != ProposalState.Paid, "Proposal already paid");
 
         unlockTime = 0;
         proposalPhase = ProposalState.Paid;
@@ -93,27 +108,32 @@ contract PfgV0 {
         emit Deposit(msg.value, block.timestamp);
     }
 
-    function withdraw() public onlyGrantee readyToWithdraw {
-        emit Withdrawal(address(this).balance, block.timestamp);
-
+    function withdraw() public checkActive onlyGrantee readyToWithdraw {
         // TODO: PFG CLOSE
+        uint amount = address(this).balance;
+
+        emit Withdrawal("PFG", amount, block.timestamp);
 
         uint granteeShare = calcGranteeShare();
+
+        emit Withdrawal("Grantee", granteeShare, block.timestamp);
 
         Grantee.transfer(granteeShare);
 
         uint qbShare = address(this).balance;
 
+        emit Withdrawal("QB", qbShare, block.timestamp);
+
         Grantor.transfer(qbShare);
     }
 
-    function liquidate() public onlyQB {
+    function liquidate() public checkActive onlyQB {
         require(
-            proposalPhase != ProposalState.Paid && proposalPhase != ProposalState.Canceled,
+            proposalPhase != ProposalState.Paid,
             "Beyond the phase of liquidation"
         );
 
-        emit Withdrawal(address(this).balance, block.timestamp);
+        emit Withdrawal("QB", address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);
 
@@ -125,7 +145,6 @@ contract PfgV0 {
     function calcGranteeShare()
         internal
         view
-        readyToWithdraw
         returns (uint granteeShare)
     {
         uint bal = address(this).balance;

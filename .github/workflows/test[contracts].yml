@@ -44,12 +44,5 @@ jobs:
       - name: Compile contracts
         run: npx hardhat compile
 
-      - name: Start Local Node
-        run: |
-          echo "start hardhat node in parallel"
-          npx hardhat node &
-          sleep 4
-
       - name: Test
-        run: npx hardhat test --network local
-      
+        run: npx hardhat test
