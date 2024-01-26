@@ -1,22 +1,22 @@
-import { HardhatUserConfig } from "hardhat/config"
-import "@nomicfoundation/hardhat-toolbox"
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
-import "hardhat-deploy"
+import "hardhat-deploy";
 
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-const ENV_FILE = process.env.DOTENV_CONFIG_PATH || "./.env"
-dotenv.config({ path: ENV_FILE })
+const ENV_FILE = process.env.DOTENV_CONFIG_PATH || "./.env";
+dotenv.config({ path: ENV_FILE });
 
-const NETWORK = process.env.NETWORK || "lilypad"
+const NETWORK = process.env.NETWORK || "hardhat";
 
 import {
   ACCOUNTS,
   ACCOUNT_ADDRESSES,
   NAMED_ACCOUNTS,
   PRIVATE_KEYS,
-} from "./utils/accounts"
-import { ethers } from "ethers"
+} from "./utils/accounts";
+import { ethers } from "ethers";
 
 const config: HardhatUserConfig = {
   defaultNetwork: NETWORK,
@@ -86,6 +86,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 40000,
   },
-}
+};
 
-export default config
+export default config;
