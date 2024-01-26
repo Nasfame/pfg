@@ -18,8 +18,7 @@ const deployPFG: DeployFunction = async function deployPFG({
   const DELTA_UNLOCK_TIME = 2 * 7 * 24 * 60 * 60; // 2 weeks in seconds
   const PROPOSAL_VALUE = ethers.parseEther("1"); // Change to the desired value in Ether
 
-
-  console.log("Deploy:Start")
+  console.log("Deploy:Start");
   // Deploy the contract
   // FIXME: fixme use hardhat-deploy (its not working)
   // const PfgV0 = await deploy("PfgV0", {
@@ -28,15 +27,15 @@ const deployPFG: DeployFunction = async function deployPFG({
   //   log: true,
   // });
 
-  const PfgV0 = await ethers.deployContract("PfgV0", [],{ //deploying to QB (as its 1st address in private keys passed in hardhat config) 
+  const PfgV0 = await ethers.deployContract("PfgV0", [], {
+    //deploying to QB (as its 1st address in private keys passed in hardhat config)
     value: PROPOSAL_VALUE,
   });
 
-  const PFGContractAddr = PfgV0.target //PFGV0.address 
+  const PFGContractAddr = PfgV0.target; //PFGV0.address
 
   console.log("PfgV0 deployed to:", PFGContractAddr);
-  console.log("PfgV0", PfgV0)
-
+  console.log("PfgV0", PfgV0);
 
   // Get the deployed contract instance
   // const pfgInstance = await ethers.getContractAt("PfgV0", PFGContractAddr);
