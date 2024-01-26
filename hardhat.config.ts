@@ -7,6 +7,9 @@ import dotenv from "dotenv"
 
 dotenv.config({path: '.env'})
 
+import {ACCOUNT_ADDRESSES, PRIVATE_KEYS,} from './utils/accounts'
+
+
 const config: HardhatUserConfig = {
   defaultNetwork: "local",
   networks: {
@@ -37,7 +40,7 @@ const config: HardhatUserConfig = {
      hardhat: {
         accounts: [
             {
-                privateKey: process.env.PRIVATE_KEY || '14a408e888e69424e2ffff167ec009ec3b858ddcd7534bb6a19d9501687997a2',
+                privateKey: process.env.PRIVATE_KEY || '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
                 balance: `${1000000000000000000000000n}`,
             },
         ],
@@ -63,15 +66,6 @@ const config: HardhatUserConfig = {
   },
   mocha: {
     timeout: 40000,
-  },
-
-  namedAccounts: {
-    QB: {
-      default: 0, // here this will by default take the first account as deployer
-      1: 0, // similarly on mainnet it will take the first account as deployer. Note though that depending on how hardhat network are configured, the account 0 on one network can be different than on another
-      4: "0xA296a3d5F026953e17F472B497eC29a5631FB51B", // but for rinkeby it will be a specific address
-      goerli: "0x84b9514E013710b9dD0811c9Fe46b837a4A0d8E0", //it can also specify a specific netwotk name (specified in hardhat.config.js)
-    },
   },
 }
 

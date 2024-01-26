@@ -20,12 +20,20 @@ export const loadAddress = (name: string, defaultValue: string) => {
 
 // the default values here are the hardhat defualt insecure accounts
 // this means that we get a reproducable dev environment between hardhat and geth
-export const ACCOUNTS: Account[] = [{
-    name: 'QB',
-    address: loadAddress('admin', '0xA296a3d5F026953e17F472B497eC29a5631FB51B'),
-    privateKey: loadPrivateKey('admin', '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'),
-    metadata: {},
-},
+export const ACCOUNTS: Account[] = [
+    {
+        name: 'QB',
+        privateKey: loadPrivateKey('QB', '0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80'),
+    },
+{
+        name: 'GRANTOR',
+        privateKey: loadPrivateKey('GRANTOR', '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d'),
+    },
+    {
+        name: 'GRANTEE',
+        privateKey: loadPrivateKey('GRANTEE', '0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a'),
+    },
+
 
 ]
 
