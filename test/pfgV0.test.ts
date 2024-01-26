@@ -54,5 +54,12 @@ describe("PfgV0", function () {
         proposalValue
       )
     })
+
+    it("Should have the correct grantor and grantee addresses", async function () {
+      const { pfg, Grantor, Grantee } = await loadFixture(deployPFGFixture)
+
+      expect(await pfg.Grantor()).to.equal(Grantor.address)
+      expect(await pfg.Grantee()).to.equal(Grantee.address)
+    })
   })
 })

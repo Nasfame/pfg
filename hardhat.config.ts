@@ -16,6 +16,8 @@ import {
   NAMED_ACCOUNTS,
   PRIVATE_KEYS,
 } from "./utils/accounts"
+import { ethers } from "ethers"
+
 const config: HardhatUserConfig = {
   defaultNetwork: NETWORK,
   networks: {
@@ -44,9 +46,21 @@ const config: HardhatUserConfig = {
       accounts: [
         {
           privateKey:
-            process.env.PRIVATE_KEY ||
+            process.env.QB_PRIVATE_KEY ||
             "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80", //hardhat 01
           balance: `${1000000000000000000000000n}`,
+        },
+        {
+          privateKey:
+            process.env.GRANTOR_PRIVATE_KEY ||
+            "0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d", //hardhat 02
+          balance: ethers.parseEther("1000").toString(),
+        },
+        {
+          privateKey:
+            process.env.GRANTEE_PRIVATE_KEY ||
+            "0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a", //hardhat 03
+          balance: ethers.parseEther("1000").toString(),
         },
       ],
     },
