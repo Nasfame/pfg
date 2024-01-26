@@ -16,13 +16,7 @@ type TIME is int;
 
 
 contract PfgV0 {
-    uint256 public constant SECOND = 1;
-    uint256 public constant MINUTE = 60 * SECOND;
-    uint256 public constant HOUR = 60 * MINUTE;
-    uint256 public constant DAY = 24 * HOUR;
-    uint256 public constant WEEK = 7 * DAY;
-    uint256 public constant MONTH = 30 * DAY; 
-
+    using TimeLib for uint256;
     uint256 public deltaUnlockTime;
 
     uint256 public unlockTime;
@@ -40,7 +34,7 @@ contract PfgV0 {
     event Withdrawal(uint amount, uint when);
 
     constructor() payable proposalValueCheck {
-        deltaUnlockTime = 2 * WEEK;
+        deltaUnlockTime = 2 * TimeLib.WEEK;
         
         unlockTime = block.timestamp + deltaUnlockTime;
 
