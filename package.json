@@ -23,6 +23,7 @@
     "test": "hardhat test",
     "test:sepolia": "hardhat test --network sepolia",
     "test:mumbai": "hardhat test --network mumbai",
+    "test:lilypad": "hardhat test --network lilypad",
     "pretest:local": "npm run start & sleep 2",
     "test:local": "hardhat test --network local",
     "test:local:dev": "concurrently \"pnpm:start\" \"pnpm:test:local\""

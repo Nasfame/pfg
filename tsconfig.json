@@ -1,12 +1,9 @@
 {
   "include": [
     "./hardhat.config.ts",
-    "./scripts",
-    "scripts",
+    "./scripts/*.ts",
     "./test",
-    "utils/accounts.ts",
-    "utils/types.ts",
-    "scripts",
+    "./utils/*.ts",
   ],
   "compilerOptions": {
     "module": "commonjs",
@@ -33,4 +30,9 @@
     "noUnusedParameters": false,
     "resolveJsonModule": true,
   },
+   "paths": {
+        "@utils/*": ["./utils/*"],
+        "@test/*": ["./test/*"],
+        "@scripts/*": ["./scripts/*"],
+    }
 }

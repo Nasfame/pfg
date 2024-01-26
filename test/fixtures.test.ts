@@ -1,6 +1,5 @@
-import { getAccount } from "utils/accounts"
+import { getAccount } from "../utils/accounts"
 import hre, { ethers } from "hardhat"
-import deployPFG from "scripts/deployPFGV0"
 import { BigNumberish, Signer } from "ethers"
 
 export const getWallet = (name: string) => {
