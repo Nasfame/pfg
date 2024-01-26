@@ -18,26 +18,36 @@ const deployPFG: DeployFunction = async function deployPFG({
   const DELTA_UNLOCK_TIME = 2 * 7 * 24 * 60 * 60; // 2 weeks in seconds
   const PROPOSAL_VALUE = ethers.parseEther("1"); // Change to the desired value in Ether
 
+
+  console.log("Deploy:Start")
   // Deploy the contract
-  const PfgV0 = await deploy("PfgV0", {
-    from: QB_ADDRESS,
-    args: [],
-    log: true,
+  // const PfgV0 = await deploy("PfgV0", {
+  //   from: QB_ADDRESS,
+  //   args: [],
+  //   log: true,
+  // });
+
+  const PfgV0 = await ethers.deployContract("PfgV0", [],{
+    value: PROPOSAL_VALUE,
   });
 
+  const PFGContractAddr = PfgV0.target //PFGV0.address
+
+  console.log("PfgV0 deployed to:", PFGContractAddr);
+
+
   // Get the deployed contract instance
-  const pfgInstance = await ethers.getContractAt("PfgV0", PfgV0.address);
+  // const pfgInstance = await ethers.getContractAt("PfgV0", PFGContractAddr);
 
-  // Perform initialization
-  await pfgInstance.initialize(
-    QB_ADDRESS,
-    GRANTOR_ADDRESS,
-    GRANTEE_ADDRESS,
-    DELTA_UNLOCK_TIME,
-    PROPOSAL_VALUE,
-  );
+  // // Perform initialization
+  // await pfgInstance.initialize(
+  //   QB_ADDRESS,
+  //   GRANTOR_ADDRESS,
+  //   GRANTEE_ADDRESS,
+  //   DELTA_UNLOCK_TIME,
+  //   PROPOSAL_VALUE,
+  // );
 
-  console.log("PfgV0 deployed to:", PfgV0.address);
   return true;
 };
 
