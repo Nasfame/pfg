@@ -12,11 +12,11 @@ export const loadEnv = (name: string, defaultValue: string) => {
 };
 
 export const loadPrivateKey = (name: string, defaultValue: string) => {
-  return loadEnv(`${name.toUpperCase()}_PRIVATE_KEY`, defaultValue);
+  return loadEnv(`${name.toUpperCase()}_PRIVATE_KEY`, defaultValue).trim();
 };
 
 export const loadAddress = (name: string, privateKey: string) => {
-  let address = loadEnv(`${name.toUpperCase()}_ADDRESS`, "");
+  let address = loadEnv(`${name.toUpperCase()}_ADDRESS`, "").trim();
 
   if (!address) {
     try {
