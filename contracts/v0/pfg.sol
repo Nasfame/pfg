@@ -128,6 +128,11 @@ contract PfgV0 {
     }
 
     function liquidate() public checkActive onlyQB {
+        require(
+            proposalPhase != ProposalState.Paid,
+            "Beyond the phase of liquidation"
+        );
+
         emit Withdrawal("QB", address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);

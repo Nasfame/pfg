@@ -161,12 +161,17 @@ describe("PfgV0", function () {
       expect(await getBal(await pfg.getAddress())).to.equal(0);
     });
 
-    /*   it("Should not allow liquidation after the proposal is paid", async function () {
-      const { pfg, QB, pfgQB } = await loadFixture(deployPFGFixture);
-      await pfg.withdraw();
+    it("Should not allow liquidation after the proposal is paid", async function () {
+      const { pfg, QB, pfgQB, pfgGrantor, proposalValue } =
+        await loadFixture(deployPFGFixture);
+
+      expect(await pfgGrantor.deposit({ value: proposalValue }))
+        .to.emit(pfgGrantor, "Deposit")
+        .withArgs();
+
       await expect(pfgQB.liquidate()).to.be.revertedWith(
         "Beyond the phase of liquidation",
       );
-    });*/
+    });
   });
 });
