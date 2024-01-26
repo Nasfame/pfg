@@ -12,9 +12,6 @@ enum ProposalState {
     Paid
 }
 
-type TIME is int;
-
-
 contract PfgV0 {
     using TimeLib for uint256;
     uint256 public deltaUnlockTime;
