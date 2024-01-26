@@ -4,9 +4,6 @@ import { Account } from "./types";
 import * as dotenv from "dotenv";
 import { Wallet } from "ethers";
 
-const ENV_FILE = ".env";
-dotenv.config({ path: ENV_FILE });
-
 export const loadEnv = (name: string, defaultValue: string) => {
   return process.env[name] || defaultValue;
 };
