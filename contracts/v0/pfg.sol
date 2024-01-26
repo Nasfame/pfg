@@ -12,20 +12,21 @@ enum ProposalState {
     Paid
 }
 
-type TIME is uint;
+type TIME is int;
 
 
 contract PfgV0 {
-    using TimeLib for TIME;
-    TIME public deltaUnlockTime = 2 * WEEK; 
-    TIME public unlockTime;
-    
-    TIME private constant SECOND=1;
-    TIME private constant MINUTE=60*SECOND;
-    TIME private constant HOUR=60*MINUTE;
-    TIME private constant DAY = 24 * HOUR;
-    TIME private constant WEEK = 7 * DAY;
-    TIME private constant MONTH = 30 * DAY; // Note: This is a simplified approximation
+    uint256 public constant SECOND = 1;
+    uint256 public constant MINUTE = 60 * SECOND;
+    uint256 public constant HOUR = 60 * MINUTE;
+    uint256 public constant DAY = 24 * HOUR;
+    uint256 public constant WEEK = 7 * DAY;
+    uint256 public constant MONTH = 30 * DAY; 
+
+    uint256 public deltaUnlockTime;
+
+    uint256 public unlockTime;
+
 
     address payable public QB; //Questbook
     address payable public Grantor;
@@ -39,6 +40,8 @@ contract PfgV0 {
     event Withdrawal(uint amount, uint when);
 
     constructor() payable proposalValueCheck {
+        deltaUnlockTime = 2 * WEEK;
+        
         unlockTime = block.timestamp + deltaUnlockTime;
 
         proposalValue = msg.value;
@@ -140,9 +143,5 @@ contract PfgV0 {
             granteeShare = bal;
         }
         return granteeShare;
-    }
-
-    function convertTimstamp(uint timestamp) public pure returns (uint year, uint month, uint day, uint hour, uint minute, uint second) {
-         return DateTime.timestampToDateTime(timestamp);
     }
 }
