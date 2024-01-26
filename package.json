@@ -7,6 +7,7 @@
   "license": "MIT",
   "scripts": {
     "setup": "remixd -i slither",
+    "dev": "remixd",
     "remixd": "remixd",
     "style": "prettier -w .",
     "start": "hardhat node",
