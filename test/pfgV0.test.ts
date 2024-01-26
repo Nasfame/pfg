@@ -126,12 +126,13 @@ describe("PfgV0", function () {
         .withArgs("QB");
     });
 
-    /*   it("Should not allow withdrawal before the unlock time", async function () {
-      const { pfg, Grantee } = await loadFixture(deployPFGFixture);
-      await expect(pfg.connect(Grantee).withdraw()).to.be.revertedWith(
+    it("Should not allow withdrawal before the unlock time", async function () {
+      const { pfg, Grantee, pfgGrantee } = await loadFixture(deployPFGFixture);
+
+      await expect(pfgGrantee.withdraw()).revertedWith(
         "You can't withdraw yet",
       );
-    });*/
+    });
 
     /*   it("Should not allow withdrawal from a non-grantee account", async function () {
       const { pfg, Grantor } = await loadFixture(deployPFGFixture);
