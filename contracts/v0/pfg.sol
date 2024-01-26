@@ -50,6 +50,8 @@ contract PfgV0 {
         require(Grantor!=Grantee, "Grantor cannot be Grantee");
 
         proposalPhase = ProposalState.Accepted;
+
+        // TODO: PFG OPEN SHORT
     }
 
     modifier onlyQB() {
@@ -89,8 +91,6 @@ contract PfgV0 {
         proposalPhase = ProposalState.Paid;
 
         emit Deposit(msg.value, block.timestamp);
-
-        // TODO: PFG OPEN SHORT
     }
 
     function withdraw() public onlyGrantee readyToWithdraw {
