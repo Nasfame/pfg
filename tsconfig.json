@@ -5,6 +5,9 @@
     "./test",
     "./utils/*.ts",
   ],
+  "exclude": [
+    "./tests/sample/*.test.ts",
+  ],
   "compilerOptions": {
     "module": "commonjs",
     "esModuleInterop": true,

@@ -23,9 +23,7 @@
     "test:sepolia": "hardhat test --network sepolia",
     "test:mumbai": "hardhat test --network mumbai",
     "test:lilypad": "hardhat test --network lilypad",
-    "pretest:local": "npm run start & sleep 2",
-    "test:local": "hardhat test --network local",
-    "test:local:dev": "concurrently \"pnpm:start\" \"pnpm:test:local\""
+    "test:pfg": "DOTENV_CONFIG_PATH='.env.test' hardhat test test/pfgV0.test.ts"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
