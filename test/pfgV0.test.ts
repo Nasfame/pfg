@@ -7,6 +7,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 
 import moment from "moment";
+import Ethers from "@typechain/ethers-v6";
 
 const PROPOSAL_VALUE = ethers.parseEther(process.env.PROPOSAL_VALUE || "0.2");
 describe("PfgV0", function () {
@@ -137,7 +138,10 @@ describe("PfgV0", function () {
     it("Should not allow withdrawal from a Grantee account", async function () {
       const { pfg, Grantor } = await loadFixture(deployPFGFixture);
       await time.increaseTo(await pfg.unlockTime());
-      await expect(pfg.connect(Grantor).withdraw()).to.be.revertedWith(
+
+      const wallet = ethers.Wallet.createRandom(ethers.provider);
+
+      await expect(pfg.connect(wallet).withdraw()).to.be.revertedWith(
         "Only Grantee can call this function",
       );
     });
