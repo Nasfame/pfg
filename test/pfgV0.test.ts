@@ -43,9 +43,9 @@ describe("PfgV0", function () {
 
   describe("Deployment", function () {
     it("Should set the right owner", async function () {
-      const { pfg, owner } = await loadFixture(deployPFGFixture)
+      const { pfg, QB } = await loadFixture(deployPFGFixture)
 
-      expect(await pfg.owner()).to.equal(owner.address)
+      expect(await pfg.QB()).to.equal(QB.address)
     })
 
     it("Should receive and store the funds to pfg", async function () {
