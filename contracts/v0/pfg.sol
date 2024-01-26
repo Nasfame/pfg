@@ -38,7 +38,7 @@ contract PfgV0 {
 
     constructor() payable proposalMinValueCheck {
         deltaUnlockTime = 2 * TimeLib.WEEK;
-        
+
         unlockTime = block.timestamp + deltaUnlockTime;
 
         proposalValue = msg.value;
@@ -84,10 +84,8 @@ contract PfgV0 {
     }
 
     function deposit() public payable onlyGrantor proposalMinValueCheck {
-        require(msg.value > 0, "Deposit amount must be greater than 0");
-
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
- 
+
         require(proposalPhase != ProposalState.Paid, "Proposal already paid");
 
         unlockTime = 0;

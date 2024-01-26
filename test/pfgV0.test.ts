@@ -34,6 +34,10 @@ describe("PfgV0", function () {
    /* const QB = getAccount("QB")
     const Grantor = getAccount("Grantor")
     const Grantee = getAccount("Grantee")*/
+
+    const pfgGrantee = pfg.connect(Grantee)
+    const pfgGrantor = pfg.connect(Grantee)
+
     return {
       pfg,
       proposalValue,
@@ -41,6 +45,8 @@ describe("PfgV0", function () {
       QB,
       Grantor,
       Grantee,
+      pfgGrantee,
+      pfgGrantor,
     }
   }
 
@@ -72,21 +78,28 @@ describe("PfgV0", function () {
       const { pfg, Grantor, proposalValue } = await loadFixture(deployPFGFixture);
 
       const pfgI =  pfg.connect(Grantor)
-      expect(pfgI.deposit({value: proposalValue}))
+      expect(await pfgI.deposit({value: proposalValue}))
           .to.emit(pfg, "Deposit")
           .withArgs();
     });
 
-   /* it("Should not allow deposits after the proposal is paid", async function () {
-      const { pfg, Grantor, proposalValue } =
+    it("Should not allow deposits after the proposal is paid", async function () {
+      const { pfg, Grantor, proposalValue, pfgGrantee, pfgGrantor } =
         await loadFixture(deployPFGFixture)
 
-      await pfg.withdraw()
-      await expect(
-        Grantor.sendTransaction({ to: pfg.address, value: proposalValue })
-      ).to.be.revertedWith("Proposal already paid")
-    })
 
+      expect(await pfgGrantor.deposit({value: proposalValue}))
+          .to.emit(pfgGrantor, "Deposit")
+          .withArgs();
+
+
+      await pfgGrantee.withdraw()
+
+      expect(await pfgGrantor.deposit({value: proposalValue}))
+          .to.emit(pfg, "Deposit")
+          .to.be.revertedWith("Proposal already paid")
+    })
+/*
     it("Should not allow deposits with insufficient funds", async function () {
       const { pfg, Grantor, proposalValue } =
         await loadFixture(deployPFGFixture)
@@ -97,8 +110,7 @@ describe("PfgV0", function () {
           value: proposalValue.sub(ethers.utils.parseEther("0.1")),
         })
       ).to.be.revertedWith("Insufficient funds to deposit")
-    })
-  */
+    })*/
   })
 /*
   describe("Withdraw", function () {
