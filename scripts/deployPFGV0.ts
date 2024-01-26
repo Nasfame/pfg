@@ -1,6 +1,7 @@
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { ethers } from "hardhat";
 import { DeployFunction } from "hardhat-deploy/dist/types";
+import { ACCOUNTS, ACCOUNT_ADDRESSES } from "utils/accounts";
 
 const deployPFG: DeployFunction = async function deployPFG({
   deployments,
@@ -12,8 +13,8 @@ const deployPFG: DeployFunction = async function deployPFG({
 
   // Change the following addresses based on your deployment needs
   const QB_ADDRESS = deployer;
-  const GRANTOR_ADDRESS = "0x09308A2577499f1fCDDfa4d5572e2e7e08f2C51D";
-  const GRANTEE_ADDRESS = "0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02";
+  const GRANTOR_ADDRESS = ACCOUNT_ADDRESSES["GRANTOR"];
+  const GRANTEE_ADDRESS = ACCOUNT_ADDRESSES["GRANTEE"];
   const DELTA_UNLOCK_TIME = 2 * 7 * 24 * 60 * 60; // 2 weeks in seconds
   const PROPOSAL_VALUE = ethers.parseEther("1"); // Change to the desired value in Ether
 
