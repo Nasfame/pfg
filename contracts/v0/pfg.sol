@@ -26,7 +26,7 @@ contract PfgV0 {
     address payable public Grantor;
     address payable public Grantee;
 
-    // migrate: to types.sol/Proposal struct
+    //TODO: migrate: to types.sol/Proposal struct
     uint public proposalValue;
     ProposalState public proposalPhase;
 
@@ -44,10 +44,9 @@ contract PfgV0 {
 
         QB = payable(msg.sender);
 
-        Grantor = QB; //TODO: for simplicity; take from constructor arg.
+        Grantor = payable(0x09308A2577499f1fCDDfa4d5572e2e7e08f2C51D); //PFG
 
-        Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //TODO: its me; but take from constructor arg
-
+        Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //HIRO
         require(Grantor!=Grantee, "Grantor cannot be Grantee");
 
         proposalPhase = ProposalState.Accepted;
