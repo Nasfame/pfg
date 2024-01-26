@@ -110,48 +110,48 @@ describe("PfgV0", function () {
       ).to.be.revertedWith("Insufficient funds to deposit");
     });
   });
-  /*
+
   describe("Withdraw", function () {
     it("Should allow the Grantee to withdraw funds after the unlock time", async function () {
-      const { pfg, Grantee } = await loadFixture(deployPFGFixture)
-      await time.increaseTo((await pfg.unlockTime()).add(10))
+      const { pfg, Grantee } = await loadFixture(deployPFGFixture);
+      await time.increaseTo((await pfg.unlockTime()).add(10));
       await expect(pfg.connect(Grantee).withdraw())
         .to.emit(pfg, "Withdrawal")
-        .withArgs(anyValue, anyValue)
-    })
+        .withArgs(anyValue, anyValue);
+    });
 
     it("Should not allow withdrawal before the unlock time", async function () {
-      const { pfg, Grantee } = await loadFixture(deployPFGFixture)
+      const { pfg, Grantee } = await loadFixture(deployPFGFixture);
       await expect(pfg.connect(Grantee).withdraw()).to.be.revertedWith(
-        "You can't withdraw yet"
-      )
-    })
+        "You can't withdraw yet",
+      );
+    });
 
     it("Should not allow withdrawal from a non-grantee account", async function () {
-      const { pfg, Grantor } = await loadFixture(deployPFGFixture)
-      await time.increaseTo((await pfg.unlockTime()).add(1))
+      const { pfg, Grantor } = await loadFixture(deployPFGFixture);
+      await time.increaseTo((await pfg.unlockTime()).add(1));
       await expect(pfg.connect(Grantor).withdraw()).to.be.revertedWith(
-        "You aren't the owner"
-      )
-    })
-  })
+        "You aren't the owner",
+      );
+    });
+  });
 
-  describe("Liquidate", function () {
+  /*  describe("Liquidate", function () {
     it("Should allow the QB to liquidate the contract", async function () {
-      const { pfg, QB } = await loadFixture(deployPFGFixture)
+      const { pfg, QB } = await loadFixture(deployPFGFixture);
       await expect(pfg.connect(QB).liquidate())
         .to.emit(pfg, "Withdrawal")
-        .withArgs(anyValue, anyValue)
-      expect(await ethers.provider.getBalance(pfg.address)).to.equal(0)
-      expect(await pfg.proposalPhase()).to.equal(ProposalState.Canceled)
-    })
+        .withArgs(anyValue, anyValue);
+      expect(await ethers.provider.getBalance(pfg.address)).to.equal(0);
+      expect(await pfg.proposalPhase()).to.equal(ProposalState.Canceled);
+    });
 
     it("Should not allow liquidation after the proposal is paid", async function () {
-      const { pfg, QB } = await loadFixture(deployPFGFixture)
-      await pfg.withdraw()
+      const { pfg, QB } = await loadFixture(deployPFGFixture);
+      await pfg.withdraw();
       await expect(pfg.connect(QB).liquidate()).to.be.revertedWith(
-        "Beyond the phase of liquidation"
-      )
-    })
-  })*/
+        "Beyond the phase of liquidation",
+      );
+    });
+  });*/
 });
