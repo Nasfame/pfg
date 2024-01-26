@@ -84,16 +84,23 @@ contract PfgV0 {
 
     modifier checkActive(){
         require(
-            proposalPhase != ProposalState.Paid && proposalPhase != ProposalState.Canceled,
+            proposalPhase != ProposalState.Canceled,
             "PFG Deactivated"
         );
         _;
     }
 
-    function deposit() public payable checkActive onlyGrantor {
-        require(msg.value >= proposalValue, "Insufficient funds to deposit");
+    modifier depositsEnabled(){
+        require(
+            proposalPhase != ProposalState.Paid,
+            "PFG Deposits Disabled"
+        );
+        _;
+    }
 
-        require(proposalPhase != ProposalState.Paid, "Proposal already paid");
+
+    function deposit() public payable checkActive onlyGrantor depositsEnabled {
+        require(msg.value >= proposalValue, "Insufficient funds to deposit");
 
         unlockTime = 0;
         proposalPhase = ProposalState.Paid;

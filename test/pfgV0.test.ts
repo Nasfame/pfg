@@ -88,15 +88,17 @@ describe("PfgV0", function () {
       const { pfg, Grantor, proposalValue, pfgGrantee, pfgGrantor } =
         await loadFixture(deployPFGFixture);
 
+      expect(await pfg.proposalPhase()).to.equal(0);
+
       expect(await pfgGrantor.deposit({ value: proposalValue }))
         .to.emit(pfgGrantor, "Deposit")
         .withArgs();
 
       expect(await pfg.proposalPhase()).to.equal(3);
 
-      expect(await pfgGrantor.deposit({ value: proposalValue }))
-        .to.emit(pfg, "Deposit")
-        .to.be.revertedWith("PFG Deactivated");
+      expect(
+        await pfgGrantor.deposit({ value: proposalValue }),
+      ).to.be.revertedWith("PFG Deposits Disabled");
     });
     /*
     it("Should not allow deposits with insufficient funds", async function () {
