@@ -149,7 +149,10 @@ contract PfgV0 {
         return granteeShare;
     }
 
-    function init(address Grantor_, address Grantee_) public checkActive {
+    function init(
+        address Grantor_,
+        address Grantee_
+    ) public checkActive onlyQB {
         Grantor = payable(Grantor_);
         Grantee = payable(Grantee_);
     }
