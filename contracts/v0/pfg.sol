@@ -24,7 +24,6 @@ contract PfgV0 {
 
     uint256 public unlockTime;
 
-
     address payable public QB; //Questbook
     address payable public Grantor;
     address payable public Grantee;
@@ -50,7 +49,7 @@ contract PfgV0 {
         Grantor = payable(0x09308A2577499f1fCDDfa4d5572e2e7e08f2C51D); //PFG
 
         Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //HIRO
-        require(Grantor!=Grantee, "Grantor cannot be Grantee");
+        require(Grantor != Grantee, "Grantor cannot be Grantee");
 
         proposalPhase = ProposalState.Accepted;
 
@@ -58,7 +57,7 @@ contract PfgV0 {
     }
 
     modifier proposalMinValueCheck() {
-        require(msg.value>0, "Proposal Value needs to be greator than 0");
+        require(msg.value > 0, "Proposal Value needs to be greator than 0");
         _;
     }
 
@@ -78,26 +77,23 @@ contract PfgV0 {
     }
 
     modifier readyToWithdraw() {
-        require(block.timestamp >= unlockTime || proposalPhase==ProposalState.Paid, "You can't withdraw yet");
-        _;
-    }
-
-    modifier checkActive(){
         require(
-            proposalPhase != ProposalState.Canceled,
-            "PFG Deactivated"
+            block.timestamp >= unlockTime ||
+                proposalPhase == ProposalState.Paid,
+            "You can't withdraw yet"
         );
         _;
     }
 
-    modifier depositsEnabled(){
-        require(
-            proposalPhase != ProposalState.Paid,
-            "PFG Deposits Disabled"
-        );
+    modifier checkActive() {
+        require(proposalPhase != ProposalState.Canceled, "PFG Deactivated");
         _;
     }
 
+    modifier depositsEnabled() {
+        require(proposalPhase != ProposalState.Paid, "PFG Deposits Disabled");
+        _;
+    }
 
     function deposit() public payable checkActive onlyGrantor depositsEnabled {
         require(msg.value >= proposalValue, "Insufficient funds to deposit");
@@ -142,11 +138,7 @@ contract PfgV0 {
         // if deposits are made post liquidations, only Grantee can withdraw the amount.
     }
 
-    function calcGranteeShare()
-        internal
-        view
-        returns (uint granteeShare)
-    {
+    function calcGranteeShare() internal view returns (uint granteeShare) {
         uint bal = address(this).balance;
 
         granteeShare = bal - proposalValue;
@@ -155,5 +147,10 @@ contract PfgV0 {
             granteeShare = bal;
         }
         return granteeShare;
+    }
+
+    function init(address Grantor_, address Grantee_) public checkActive {
+        Grantor = payable(Grantor_);
+        Grantee = payable(Grantee_);
     }
 }
