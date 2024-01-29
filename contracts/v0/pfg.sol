@@ -54,6 +54,8 @@ contract PfgV0 {
         proposalPhase = ProposalState.Accepted;
 
         // TODO: PFG OPEN SHORT
+
+        _openPFGShort();
     }
 
     modifier proposalMinValueCheck() {
@@ -129,6 +131,8 @@ contract PfgV0 {
             "Beyond the phase of liquidation"
         );
 
+        _closePFGShort();
+
         emit Withdrawal("QB", address(this).balance, block.timestamp);
 
         QB.transfer(address(this).balance);
@@ -149,6 +153,14 @@ contract PfgV0 {
         return granteeShare;
     }
 
+    function _openPFGShort() internal {
+        
+    }
+
+     function _closePFGShort() internal {
+        
+    }
+
     function init(
         address Grantor_,
         address Grantee_
@@ -156,4 +168,6 @@ contract PfgV0 {
         Grantor = payable(Grantor_);
         Grantee = payable(Grantee_);
     }
+
+    
 }
