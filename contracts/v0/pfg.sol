@@ -30,7 +30,7 @@ contract PfgV0 {
 
     //TODO: migrate: to types.sol/Proposal struct
     uint public proposalValue;
-    ProposalState public proposalPhase;
+    ProposalState public proposalPhase = ProposalState.Accepted;
 
     event Deposit(uint amount, uint when);
     event Withdrawal(string name, uint amount, uint when);
@@ -53,6 +53,8 @@ contract PfgV0 {
         assert(Grantor != Grantee, "Grantor cannot be Grantee");
 
         proposalPhase = ProposalState.Accepted;
+
+        assert(proposalPhase, "proposalPhase needs to be accepted");
 
         // TODO: PFG OPEN SHORT
 
