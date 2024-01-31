@@ -49,7 +49,8 @@ contract PfgV0 {
         Grantor = payable(0x09308A2577499f1fCDDfa4d5572e2e7e08f2C51D); //PFG
 
         Grantee = payable(0x823531B7c7843D8c3821B19D70cbFb6173b9Cb02); //HIRO
-        require(Grantor != Grantee, "Grantor cannot be Grantee");
+
+        assert(Grantor != Grantee, "Grantor cannot be Grantee");
 
         proposalPhase = ProposalState.Accepted;
 
@@ -116,7 +117,7 @@ contract PfgV0 {
 
         emit Withdrawal("Grantee", granteeShare, block.timestamp);
 
-        Grantee.transfer(granteeShare);
+        Grantee.transfer(gcranteeShare);
 
         uint qbShare = address(this).balance;
 
@@ -153,13 +154,9 @@ contract PfgV0 {
         return granteeShare;
     }
 
-    function _openPFGShort() internal {
-        
-    }
+    function _openPFGShort() internal {}
 
-     function _closePFGShort() internal {
-        
-    }
+    function _closePFGShort() internal {}
 
     function init(
         address Grantor_,
@@ -168,6 +165,4 @@ contract PfgV0 {
         Grantor = payable(Grantor_);
         Grantee = payable(Grantee_);
     }
-
-    
 }
