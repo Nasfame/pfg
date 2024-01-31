@@ -117,15 +117,18 @@ contract PfgV0 {
 
         uint granteeShare = calcGranteeShare();
 
-        emit Withdrawal("Grantee", granteeShare, block.timestamp);
+        if (!Grantee.send(amount)) {
+            revert("Failed to transfer to grantee");
+        }
 
-        Grantee.transfer(gcranteeShare);
+        emit Withdrawal("Grantee", granteeShare, block.timestamp);
 
         uint qbShare = address(this).balance;
 
+        if (QB.send(qbShare)) {
+            revert("Failed to transfer to QB");
+        }
         emit Withdrawal("QB", qbShare, block.timestamp);
-
-        Grantor.transfer(qbShare);
     }
 
     function liquidate() public checkActive onlyQB {
