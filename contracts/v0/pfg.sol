@@ -5,6 +5,8 @@ pragma solidity ^0.8.20;
 
 import "contracts/time.sol";
 
+import "node_modules/gmx-contracts"
+
 enum ProposalState {
     Accepted,
     Rejected,

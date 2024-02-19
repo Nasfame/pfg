@@ -59,7 +59,8 @@
   "dependencies": {
     "@openzeppelin/contracts": "^4.9.3",
     "@openzeppelin/contracts-upgradeable": "^4.9.3",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "gmx-contracts": "github:Nasfame/gmx-contracts"
   },
   "engines": {
     "node": ">=18.0.0",
